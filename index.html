@@ -5,32 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>SWIMA Research</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
 <style>
 :root {
-    --primary-hue: 210;
-    --primary: hsl(var(--primary-hue), 100%, 25%);
-    --primary-light: hsl(var(--primary-hue), 80%, 60%);
-    --accent: #d4af37;
-    --accent-light: #f3e5ab;
-    --bg-body: #f0f2f5;
+    --primary: #1a237e;
+    --primary-dark: #000051;
+    --accent: #ffd700;
+    --bg-body: #f4f6f9;
     --bg-card: #ffffff;
-    --text-main: #1a1a1a;
-    --text-light: #666666;
+    --text-main: #2c3e50;
+    --text-light: #95a5a6;
     --error: #e74c3c;
-    --success: #2ecc71;
-    --radius: 20px;
-    --shadow: 0 10px 40px -10px rgba(0,0,0,0.15);
-    --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    --success: #27ae60;
+    --radius: 24px;
+    --shadow: 0 15px 35px rgba(0,0,0,0.1);
+    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-* {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-    outline: none;
-    margin: 0;
-    padding: 0;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
 
 body {
     font-family: 'Cairo', sans-serif;
@@ -39,14 +31,13 @@ body {
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
     padding: 20px;
-    background-image: radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 20%), radial-gradient(circle at 90% 80%, rgba(0, 50, 150, 0.05) 0%, transparent 20%);
+    background-image: radial-gradient(at 0% 0%, rgba(26, 35, 126, 0.05) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(255, 215, 0, 0.1) 0px, transparent 50%);
 }
 
 .app-wrapper {
     width: 100%;
-    max-width: 480px;
+    max-width: 500px;
     background: var(--bg-card);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
@@ -57,14 +48,15 @@ body {
 }
 
 header {
-    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
-    padding: 40px 20px 30px;
+    background: linear-gradient(135deg, #000046 0%, #1cb5e0 100%);
+    background: linear-gradient(135deg, #1a2980 0%, #26d0ce 100%); 
+    padding: 40px 20px 90px; 
     text-align: center;
     color: white;
     position: relative;
-    border-bottom-left-radius: 30px;
-    border-bottom-right-radius: 30px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     z-index: 10;
 }
 
@@ -73,147 +65,151 @@ header {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-bottom: 15px;
+    position: relative;
+    z-index: 2;
 }
 
 .brand-sticker {
-    width: 80px;
-    height: 80px;
+    width: 90px;
+    height: 90px;
     object-fit: contain;
-    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
-    animation: float 3s ease-in-out infinite;
-    margin-bottom: 15px;
-}
-
-.brand-logo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    line-height: 1;
+    filter: drop-shadow(0 8px 15px rgba(0,0,0,0.25));
+    animation: float 4s ease-in-out infinite;
+    margin-bottom: 10px;
 }
 
 .brand-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 38px;
+    font-family: 'Cinzel', serif;
+    font-size: 42px;
     font-weight: 900;
-    letter-spacing: 2px;
-    background: linear-gradient(to right, #ffffff 0%, #d4af37 50%, #ffffff 100%);
+    letter-spacing: 3px;
+    background: linear-gradient(to bottom, #fff 40%, #e0e0e0 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    margin-bottom: 5px;
+    text-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    margin-bottom: 2px;
     text-transform: uppercase;
 }
 
 .brand-subtitle {
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 4px;
+    font-size: 15px;
+    font-weight: 700;
     color: var(--accent);
+    letter-spacing: 1px;
     text-transform: uppercase;
-    opacity: 0.9;
+    opacity: 0.95;
+    background: rgba(0,0,0,0.2);
+    padding: 4px 12px;
+    border-radius: 20px;
+    backdrop-filter: blur(5px);
 }
 
 .step-indicator {
     display: flex;
     justify-content: space-between;
-    padding: 0 40px;
-    margin-top: -25px;
+    padding: 0 50px;
+    margin-top: -35px;
     position: relative;
     z-index: 20;
 }
 
 .step-dot {
-    width: 50px;
-    height: 50px;
+    width: 55px;
+    height: 55px;
     background: var(--bg-card);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
-    color: var(--text-light);
+    font-weight: 800;
+    color: #bdc3c7;
     box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    border: 3px solid #fff;
+    border: 4px solid #fff;
     transition: var(--transition);
-    font-size: 14px;
+    font-size: 16px;
+    position: relative;
 }
 
 .step-dot.active {
     background: var(--primary);
     color: #fff;
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 50, 150, 0.3);
+    transform: translateY(-8px);
+    box-shadow: 0 12px 20px rgba(26, 35, 126, 0.3);
+    border-color: #fff;
 }
 
 .step-dot.completed {
     background: var(--success);
     color: #fff;
+    border-color: #fff;
 }
 
 .progress-line-bg {
     position: absolute;
     top: 50%;
-    left: 60px;
-    right: 60px;
-    height: 4px;
-    background: #e0e0e0;
+    left: 70px;
+    right: 70px;
+    height: 5px;
+    background: #ecf0f1;
     z-index: -1;
     transform: translateY(-50%);
+    border-radius: 10px;
 }
 
 .progress-line-fill {
     position: absolute;
     top: 50%;
-    left: 60px;
-    height: 4px;
+    left: 70px;
+    height: 5px;
     background: var(--success);
     z-index: -1;
     transform: translateY(-50%);
     transition: width 0.5s ease;
     width: 0%;
+    border-radius: 10px;
 }
 
 form {
-    padding: 40px 25px;
+    padding: 50px 25px 30px;
     flex: 1;
-    position: relative;
-    overflow: hidden;
 }
 
 .step-content {
     display: none;
-    animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: slideUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.step-content.active {
-    display: block;
-}
+.step-content.active { display: block; }
 
-.input-wrapper {
+.section-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--primary);
+    margin-bottom: 30px;
     position: relative;
-    margin-bottom: 25px;
+    padding-right: 15px;
 }
 
-.input-wrapper label {
+.section-title::before {
+    content: '';
     position: absolute;
-    top: 18px;
-    right: 15px;
-    font-size: 14px;
-    color: #999;
-    background: var(--bg-card);
-    padding: 0 5px;
-    transition: var(--transition);
-    pointer-events: none;
+    right: 0;
+    top: 5px;
+    bottom: 5px;
+    width: 4px;
+    background: var(--accent);
+    border-radius: 4px;
 }
+
+.input-wrapper { position: relative; margin-bottom: 25px; }
 
 .input-field {
     width: 100%;
-    padding: 18px 15px;
+    padding: 18px 20px;
     font-size: 16px;
-    border: 2px solid #eee;
-    border-radius: 12px;
-    background: transparent;
+    border: 2px solid #f0f0f0;
+    border-radius: 16px;
+    background: #fcfcfc;
     transition: var(--transition);
     font-family: 'Cairo', sans-serif;
     color: var(--text-main);
@@ -222,54 +218,52 @@ form {
 
 .input-field:focus {
     border-color: var(--primary);
-    box-shadow: 0 0 0 4px rgba(0, 50, 150, 0.1);
+    background: #fff;
+    box-shadow: 0 5px 20px rgba(26, 35, 126, 0.08);
+    transform: translateY(-2px);
+}
+
+.input-wrapper label {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    color: #95a5a6;
+    font-size: 15px;
+    transition: var(--transition);
+    pointer-events: none;
+    background: transparent;
+    padding: 0 5px;
 }
 
 .input-field:focus ~ label,
 .input-field:not(:placeholder-shown) ~ label {
-    top: -10px;
+    top: 0;
     font-size: 12px;
     color: var(--primary);
+    background: var(--bg-card);
     font-weight: 700;
 }
 
-.input-field.error {
-    border-color: var(--error);
-    background: #fff5f5;
-}
-
-.input-field.error ~ label {
-    color: var(--error);
-}
-
-.error-msg {
-    color: var(--error);
-    font-size: 12px;
-    margin-top: 6px;
-    display: none;
-    font-weight: 600;
-    padding-right: 5px;
-}
+.input-field.error { border-color: var(--error); background: #fff8f8; }
+.input-field.error ~ label { color: var(--error); }
+.error-msg { color: var(--error); font-size: 12px; margin-top: 8px; display: none; font-weight: 700; padding-right: 10px; }
 
 select.input-field {
     appearance: none;
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a237e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
     background-repeat: no-repeat;
-    background-position: left 15px center;
+    background-position: left 20px center;
     background-size: 18px;
 }
 
-.btn-group {
-    display: flex;
-    gap: 15px;
-    margin-top: 40px;
-}
+.btn-group { display: flex; gap: 15px; margin-top: 40px; }
 
 .btn {
     flex: 1;
-    padding: 16px;
+    padding: 18px;
     border: none;
-    border-radius: 12px;
+    border-radius: 16px;
     font-family: 'Cairo', sans-serif;
     font-weight: 700;
     font-size: 16px;
@@ -279,30 +273,22 @@ select.input-field {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    position: relative;
-    overflow: hidden;
 }
 
 .btn-primary {
     background: var(--primary);
     color: white;
-    box-shadow: 0 8px 20px rgba(0, 50, 150, 0.25);
+    box-shadow: 0 10px 25px rgba(26, 35, 126, 0.25);
 }
 
-.btn-primary:active {
-    transform: scale(0.96);
-}
-
-.btn-secondary {
-    background: #f1f3f5;
-    color: var(--text-light);
-}
+.btn-primary:active { transform: scale(0.96); }
+.btn-secondary { background: #f0f2f5; color: var(--text-light); }
 
 .summary-box {
-    background: #f8f9fa;
-    border-radius: 16px;
+    background: #f8fbff;
+    border-radius: 18px;
     padding: 25px;
-    border: 1px dashed #ced4da;
+    border: 1px solid #eef2f7;
 }
 
 .summary-row {
@@ -310,99 +296,51 @@ select.input-field {
     justify-content: space-between;
     margin-bottom: 15px;
     padding-bottom: 15px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px dashed #dbe2ef;
 }
-
-.summary-row:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
-}
-
-.s-label {
-    color: #888;
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.s-value {
-    color: var(--text-main);
-    font-weight: 700;
-    font-size: 15px;
-    text-align: left;
-}
+.summary-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.s-label { color: #8fa1b3; font-size: 13px; font-weight: 600; }
+.s-value { color: var(--primary); font-weight: 700; font-size: 15px; }
 
 .checkbox-wrapper {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-top: 25px;
+    gap: 15px;
+    margin-top: 30px;
     padding: 15px;
-    background: rgba(46, 204, 113, 0.1);
-    border-radius: 12px;
-    border: 1px solid rgba(46, 204, 113, 0.2);
+    background: #f0fff4;
+    border-radius: 14px;
+    border: 1px solid #c6f6d5;
 }
-
-.checkbox-wrapper input {
-    width: 20px;
-    height: 20px;
-    accent-color: var(--success);
-    cursor: pointer;
-}
-
-.checkbox-wrapper label {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-main);
-    cursor: pointer;
-    line-height: 1.4;
-}
+.checkbox-wrapper input { width: 22px; height: 22px; accent-color: var(--success); cursor: pointer; }
+.checkbox-wrapper label { font-size: 13px; font-weight: 600; color: #2d3748; cursor: pointer; line-height: 1.5; }
 
 .toast {
     position: fixed;
     top: 20px;
     left: 50%;
     transform: translateX(-50%) translateY(-100px);
-    background: #333;
+    background: #2d3436;
     color: #fff;
-    padding: 12px 25px;
+    padding: 14px 25px;
     border-radius: 50px;
     font-size: 14px;
     font-weight: 600;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
     z-index: 1000;
     opacity: 0;
     transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
-
-.toast.visible {
-    transform: translateX(-50%) translateY(0);
-    opacity: 1;
-}
-
+.toast.visible { transform: translateX(-50%) translateY(0); opacity: 1; }
 .toast.success { background: var(--success); }
 .toast.error { background: var(--error); }
 
-@keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-8px); }
-    100% { transform: translateY(0px); }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); border-color: var(--error); }
-    75% { transform: translateX(5px); border-color: var(--error); }
-}
-
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
 .shake { animation: shake 0.4s ease-in-out; }
 
 </style>
@@ -418,10 +356,8 @@ select.input-field {
     <header>
         <div class="brand-container">
             <img src="sticker.webp" alt="Logo" class="brand-sticker">
-            <div class="brand-logo">
-                <span class="brand-name">SWIMA</span>
-                <span class="brand-subtitle">للبحوث الأكاديمية</span>
-            </div>
+            <div class="brand-name">SWIMA</div>
+            <div class="brand-subtitle">للبحوث الأكاديمية</div>
         </div>
         
         <div class="step-indicator">
@@ -436,18 +372,18 @@ select.input-field {
     <form onsubmit="return false;">
         
         <div class="step-content active" id="step1">
-            <h3 style="margin-bottom: 25px; color: var(--primary); font-weight: 800;">المعلومات الشخصية</h3>
+            <div class="section-title">المعلومات الشخصية</div>
             
             <div class="input-wrapper">
                 <input type="text" id="name" class="input-field" placeholder=" " autocomplete="off">
                 <label>الاسم الكامل</label>
-                <div class="error-msg" id="err-name">يرجى كتابة اسم حقيقي (حروف فقط)</div>
+                <div class="error-msg" id="err-name">يرجى كتابة الاسم (حروف فقط)</div>
             </div>
 
             <div class="input-wrapper">
                 <input type="tel" id="phone" class="input-field" placeholder=" " maxlength="10" inputmode="numeric">
                 <label>رقم الهاتف</label>
-                <div class="error-msg" id="err-phone">رقم هاتف غير صحيح (يبدأ بـ 05, 06, 07)</div>
+                <div class="error-msg" id="err-phone">رقم غير صحيح (05, 06, 07)</div>
             </div>
 
             <div class="input-wrapper">
@@ -459,13 +395,13 @@ select.input-field {
             <div class="btn-group">
                 <button class="btn btn-primary" onclick="nextStep(1)">
                     المتابعة
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </button>
             </div>
         </div>
 
         <div class="step-content" id="step2">
-            <h3 style="margin-bottom: 25px; color: var(--primary); font-weight: 800;">تفاصيل الطلب</h3>
+            <div class="section-title">تفاصيل الطلب</div>
 
             <div class="input-wrapper">
                 <select id="level" class="input-field">
@@ -481,14 +417,14 @@ select.input-field {
 
             <div class="input-wrapper">
                 <input type="text" id="module" class="input-field" placeholder=" ">
-                <label>اسم المقياس (المادة)</label>
+                <label>المقياس (المادة)</label>
                 <div class="error-msg" id="err-module">اسم المقياس مطلوب</div>
             </div>
 
             <div class="input-wrapper">
                 <input type="text" id="title" class="input-field" placeholder=" ">
                 <label>عنوان البحث</label>
-                <div class="error-msg" id="err-title">عنوان البحث مطلوب (أكثر من 5 أحرف)</div>
+                <div class="error-msg" id="err-title">عنوان البحث قصير جداً</div>
             </div>
 
             <div class="input-wrapper">
@@ -499,7 +435,7 @@ select.input-field {
 
             <div class="input-wrapper">
                 <select id="feature" class="input-field">
-                    <option value="لا، بحث فقط" selected>بحث فقط (قياسي)</option>
+                    <option value="لا، بحث فقط" selected>بحث فقط (PDF)</option>
                     <option value="نعم، أريد شرح جزئيات">شرح إضافي + خطة (Premium)</option>
                 </select>
                 <label>خدمات إضافية</label>
@@ -509,13 +445,13 @@ select.input-field {
                 <button class="btn btn-secondary" onclick="prevStep(2)">رجوع</button>
                 <button class="btn btn-primary" onclick="nextStep(2)">
                     متابعة
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </button>
             </div>
         </div>
 
         <div class="step-content" id="step3">
-            <h3 style="margin-bottom: 25px; color: var(--primary); font-weight: 800;">تأكيد البيانات</h3>
+            <div class="section-title">تأكيد البيانات</div>
             
             <div class="summary-box">
                 <div class="summary-row">
@@ -546,7 +482,7 @@ select.input-field {
 
             <div class="checkbox-wrapper">
                 <input type="checkbox" id="terms">
-                <label for="terms">أؤكد صحة البيانات وأوافق على دفع الرسوم الرمزية بعد قبول الطلب.</label>
+                <label for="terms">أتعهد بصحة المعلومات وألتزم بدفع الرسوم بعد القبول.</label>
             </div>
 
             <div class="btn-group">
@@ -566,10 +502,9 @@ select.input-field {
     tg.ready();
 
     const dateInput = document.getElementById('date');
-    const today = new Date().toISOString().split('T')[0];
-    dateInput.min = today;
+    dateInput.min = new Date().toISOString().split('T')[0];
 
-    function showToast(msg, type = 'error') {
+    function showToast(msg, type) {
         const toast = document.getElementById('toast');
         const icon = document.getElementById('toastIcon');
         const text = document.getElementById('toastMsg');
@@ -595,27 +530,26 @@ select.input-field {
             err.style.display = 'block';
             setTimeout(() => parent.classList.remove('shake'), 400);
             return false;
-        } else {
-            el.classList.remove('error');
-            err.style.display = 'none';
-            return true;
         }
+        el.classList.remove('error');
+        err.style.display = 'none';
+        return true;
     }
 
     function nextStep(currentStep) {
         let isValid = true;
-
+        
         if (currentStep === 1) {
             const name = document.getElementById('name').value.trim();
             const phone = document.getElementById('phone').value.trim();
             const wilaya = document.getElementById('wilaya').value.trim();
 
-            const nameRegex = /^[\u0600-\u06FFa-zA-Z\s]{3,}$/;
+            const nameRegex = /^[\u0600-\u06FFa-zA-Z\s]{2,}$/;
             const phoneRegex = /^(05|06|07)[0-9]{8}$/;
 
             isValid = validateField('name', nameRegex.test(name)) && isValid;
             isValid = validateField('phone', phoneRegex.test(phone)) && isValid;
-            isValid = validateField('wilaya', wilaya.length > 2) && isValid;
+            isValid = validateField('wilaya', wilaya.length >= 3) && isValid;
         } 
         else if (currentStep === 2) {
             const level = document.getElementById('level').value;
@@ -625,7 +559,7 @@ select.input-field {
 
             isValid = validateField('level', level !== "") && isValid;
             isValid = validateField('module', module.length >= 2) && isValid;
-            isValid = validateField('title', title.length >= 5) && isValid;
+            isValid = validateField('title', title.length >= 4) && isValid;
             isValid = validateField('date', date !== "") && isValid;
         }
 
@@ -633,37 +567,25 @@ select.input-field {
             if (currentStep === 2) updateSummary();
             goToStep(currentStep + 1);
         } else {
-            showToast('يرجى تصحيح الأخطاء', 'error');
+            showToast('يرجى التحقق من الحقول المطلوبة', 'error');
         }
     }
 
-    function prevStep(currentStep) {
-        goToStep(currentStep - 1);
-    }
+    function prevStep(step) { goToStep(step - 1); }
 
     function goToStep(step) {
         document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
         document.getElementById(`step${step}`).classList.add('active');
 
-        document.querySelectorAll('.step-dot').forEach((dot, index) => {
-            if (index + 1 < step) {
-                dot.classList.add('completed');
-                dot.classList.remove('active');
-                dot.innerHTML = '✓';
-            } else if (index + 1 === step) {
-                dot.classList.add('active');
-                dot.classList.remove('completed');
-                dot.innerHTML = step;
-            } else {
-                dot.classList.remove('active', 'completed');
-                dot.innerHTML = index + 1;
-            }
+        document.querySelectorAll('.step-dot').forEach((dot, idx) => {
+            dot.className = 'step-dot';
+            dot.innerHTML = idx + 1;
+            if (idx + 1 < step) { dot.classList.add('completed'); dot.innerHTML = '✓'; }
+            else if (idx + 1 === step) dot.classList.add('active');
         });
 
         const progress = document.getElementById('progressFill');
-        if (step === 1) progress.style.width = '0%';
-        else if (step === 2) progress.style.width = '50%';
-        else if (step === 3) progress.style.width = '100%';
+        progress.style.width = step === 1 ? '0%' : step === 2 ? '50%' : '100%';
         
         tg.HapticFeedback.selectionChanged();
     }
@@ -698,10 +620,7 @@ select.input-field {
         };
 
         showToast('جاري إرسال الطلب...', 'success');
-        
-        setTimeout(() => {
-            tg.sendData(JSON.stringify(data));
-        }, 800);
+        setTimeout(() => tg.sendData(JSON.stringify(data)), 800);
     }
 </script>
 </body>

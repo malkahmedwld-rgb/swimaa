@@ -2,167 +2,601 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>استمارة طلب بحث ذكية</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>منصة البحوث القانونية</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    
     <style>
-        :root { --main-color: #2a9d8f; --error-color: #e76f51; }
+        /* --- المتغيرات والتأسيس --- */
+        :root {
+            --primary-color: #1a237e; /* أزرق ملكي */
+            --secondary-color: #c5a059; /* ذهبي قانوني */
+            --bg-color: #f8f9fa;
+            --surface-color: #ffffff;
+            --text-primary: #2c3e50;
+            --text-secondary: #7f8c8d;
+            --error-color: #e74c3c;
+            --success-color: #27ae60;
+            --border-radius: 16px;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--tg-theme-bg-color, #f4f6f8);
-            color: var(--tg-theme-text-color, #000);
-            margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center;
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--tg-theme-bg-color, var(--bg-color));
+            color: var(--tg-theme-text-color, var(--text-primary));
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 20px;
         }
-        .container {
-            width: 100%; max-width: 400px;
-            background: var(--tg-theme-secondary-bg-color, #fff);
-            padding: 25px; border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+
+        .app-container {
+            width: 100%;
+            max-width: 500px;
+            background: var(--tg-theme-secondary-bg-color, var(--surface-color));
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 40px;
+            position: relative;
         }
-        h2 { text-align: center; color: var(--main-color); margin-bottom: 25px; font-weight: 800; }
-        label { display: block; margin: 15px 0 8px; font-weight: 600; font-size: 14px; }
-        input, select {
-            width: 100%; padding: 14px;
-            border: 2px solid #eee; border-radius: 10px;
-            box-sizing: border-box; background: var(--tg-theme-bg-color, #fff);
-            color: var(--tg-theme-text-color, #000); font-size: 15px; transition: 0.3s;
+
+        /* --- الهيدر (Header) --- */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), #283593);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
-        input:focus, select:focus { border-color: var(--main-color); outline: none; }
-        input.error { border-color: var(--error-color); animation: shake 0.3s; }
-        .error-msg { color: var(--error-color); font-size: 12px; display: none; margin-top: 5px; }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: -10%;
+            width: 120%;
+            height: 100px;
+            background: var(--surface-color);
+            border-radius: 50%;
+        }
+
+        .logo-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+        }
+
+        .header p {
+            margin: 5px 0 0;
+            font-size: 14px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        /* --- شريط التقدم (Progress Bar) --- */
+        .progress-container {
+            padding: 20px 30px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .progress-track {
+            background-color: #e0e0e0;
+            height: 6px;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background-color: var(--secondary-color);
+            height: 100%;
+            width: 33%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .steps-label {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-secondary);
+        }
+
+        .step-active { color: var(--primary-color); }
+
+        /* --- محتوى النموذج (Form Content) --- */
+        .form-content {
+            padding: 10px 25px 30px;
+            min-height: 400px;
+        }
+
+        .step {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            border-right: 4px solid var(--secondary-color);
+            padding-right: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        /* --- حقول الإدخال (Inputs) --- */
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            background-color: var(--surface-color);
+            padding: 0 5px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .input-group input, 
+        .input-group select {
+            width: 100%;
+            padding: 16px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 15px;
+            background: transparent;
+            font-family: 'Cairo', sans-serif;
+            color: var(--text-primary);
+            transition: var(--transition);
+            appearance: none; /* لإزالة سهم السيلكت الافتراضي */
+        }
+
+        .input-group input:focus,
+        .input-group select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(26, 35, 126, 0.1);
+        }
+
+        /* تحريك التسمية عند التركيز أو وجود نص */
+        .input-group input:focus ~ label,
+        .input-group input:not(:placeholder-shown) ~ label,
+        .input-group select:focus ~ label,
+        .input-group select:valid ~ label {
+            top: 0;
+            font-size: 12px;
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .input-group select {
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a237e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: left 15px center;
+            background-size: 16px;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 11px;
+            margin-top: 5px;
+            display: none;
+            font-weight: 600;
+        }
+
+        .input-group.error input,
+        .input-group.error select {
+            border-color: var(--error-color);
+            background-color: #fff8f8;
+        }
+        
+        .input-group.error .error-message { display: block; }
+        .input-group.error label { color: var(--error-color); }
+
+        /* --- الأزرار (Buttons) --- */
+        .actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
         .btn {
-            background-color: var(--main-color); color: white;
-            border: none; padding: 16px; width: 100%;
-            border-radius: 12px; font-size: 18px; cursor: pointer;
-            margin-top: 30px; font-weight: bold;
-            box-shadow: 0 4px 10px rgba(42, 157, 143, 0.3);
+            flex: 1;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-        @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } 100% { transform: translateX(0); } }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 15px rgba(26, 35, 126, 0.3);
+        }
+
+        .btn-primary:active { transform: scale(0.98); }
+
+        .btn-secondary {
+            background-color: #f0f2f5;
+            color: var(--text-secondary);
+        }
+
+        /* --- بطاقة الملخص (Summary Card) --- */
+        .summary-card {
+            background-color: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #eee;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px dashed #e0e0e0;
+        }
+        
+        .summary-item:last-child { border-bottom: none; margin-bottom: 0; }
+
+        .s-label { color: var(--text-secondary); font-size: 13px; }
+        .s-value { font-weight: 700; color: var(--primary-color); font-size: 14px; text-align: left; }
+
+        /* --- Checkbox Custom --- */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+        
+        input[type="checkbox"] {
+            accent-color: var(--primary-color);
+            width: 20px;
+            height: 20px;
+        }
+        
+        .checkbox-group label { font-size: 13px; color: var(--text-secondary); cursor: pointer; }
+
+        /* --- Animations --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .shake { animation: shake 0.3s ease-in-out; }
+
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>📄 طلب بحث جامعي</h2>
-    
-    <label>🎓 المستوى والتخصص</label>
-    <select id="level">
-        <option value="سنة أولى حقوق">سنة أولى حقوق</option>
-        <option value="سنة ثانية حقوق">سنة ثانية حقوق</option>
-        <option value="سنة ثالثة (قانون خاص)">سنة ثالثة (قانون خاص)</option>
-        <option value="سنة ثالثة (قانون عام)">سنة ثالثة (قانون عام)</option>
-    </select>
+<div class="app-container">
+    <div class="header">
+        <span class="logo-icon">⚖️</span>
+        <h1>بوابة البحوث الأكاديمية</h1>
+        <p>نظام طلبات البحوث القانونية - دفعة 2026</p>
+    </div>
 
-    <label>📘 اسم المقياس (المادة)</label>
-    <input type="text" id="module" placeholder="مثال: القانون الإداري">
-    <div class="error-msg" id="err-module">يرجى كتابة اسم المقياس بشكل صحيح</div>
+    <div class="progress-container">
+        <div class="progress-track">
+            <div class="progress-fill" id="progressBar"></div>
+        </div>
+        <div class="steps-label">
+            <span id="label1" class="step-active">البيانات الشخصية</span>
+            <span id="label2">تفاصيل البحث</span>
+            <span id="label3">المراجعة</span>
+        </div>
+    </div>
 
-    <label>📝 عنوان البحث</label>
-    <input type="text" id="title" placeholder="أدخل عنوان البحث كاملاً">
-    <div class="error-msg" id="err-title">العنوان قصير جداً أو غير مفهوم</div>
+    <div class="form-content">
+        
+        <div class="step active" id="step1">
+            <div class="section-title">بيانات الطالب</div>
+            
+            <div class="input-group">
+                <input type="text" id="name" placeholder=" " autocomplete="off">
+                <label>الاسم واللقب (ثلاثي)</label>
+                <div class="error-message">يرجى كتابة الاسم الثلاثي بالكامل (حروف فقط)</div>
+            </div>
 
-    <label>👤 الاسم واللقب</label>
-    <input type="text" id="name" placeholder="الاسم الكامل للطالب">
-    <div class="error-msg" id="err-name">يجب كتابة الاسم واللقب (حروف فقط)</div>
+            <div class="input-group">
+                <input type="tel" id="phone" placeholder=" " maxlength="10" inputmode="numeric">
+                <label>رقم الهاتف (للتواصل)</label>
+                <div class="error-message">رقم الهاتف يجب أن يبدأ بـ 05/06/07 ويتكون من 10 أرقام</div>
+            </div>
 
-    <label>📱 رقم الهاتف</label>
-    <input type="tel" id="phone" placeholder="06xxxxxxxx" maxlength="10">
-    <div class="error-msg" id="err-phone">رقم الهاتف غير صحيح (يجب أن يبدأ بـ 05/06/07)</div>
+            <div class="input-group">
+                <input type="text" id="wilaya" placeholder=" ">
+                <label>الولاية</label>
+                <div class="error-message">يرجى كتابة اسم الولاية بشكل صحيح</div>
+            </div>
 
-    <label>📍 الولاية</label>
-    <input type="text" id="wilaya" placeholder="اسم الولاية">
-    <div class="error-msg" id="err-wilaya">اسم الولاية غير صحيح</div>
+            <div class="actions">
+                <button class="btn btn-primary" onclick="nextStep(1)">
+                    التالي
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+            </div>
+        </div>
 
-    <label>📅 تاريخ التسليم المطلوب</label>
-    <input type="date" id="date">
-    <div class="error-msg" id="err-date">التاريخ غير منطقي (قديم أو بعيد جداً)</div>
+        <div class="step" id="step2">
+            <div class="section-title">تفاصيل البحث العلمي</div>
+            
+            <div class="input-group">
+                <select id="level" required>
+                    <option value="" disabled selected></option>
+                    <option value="سنة أولى حقوق">سنة أولى حقوق</option>
+                    <option value="سنة ثانية حقوق">سنة ثانية حقوق</option>
+                    <option value="سنة ثالثة (قانون خاص)">سنة ثالثة (قانون خاص)</option>
+                    <option value="سنة ثالثة (قانون عام)">سنة ثالثة (قانون عام)</option>
+                </select>
+                <label>المستوى الدراسي</label>
+                <div class="error-message">يرجى اختيار المستوى</div>
+            </div>
 
-    <label>💡 خدمة إضافية</label>
-    <select id="feature">
-        <option value="لا، بحث فقط">لا، بحث فقط</option>
-        <option value="نعم، أريد شرح جزئيات">نعم، أريد شرح جزئيات</option>
-    </select>
+            <div class="input-group">
+                <input type="text" id="module" placeholder=" ">
+                <label>اسم المقياس (المادة)</label>
+                <div class="error-message">يرجى تحديد المقياس (3 أحرف على الأقل)</div>
+            </div>
 
-    <button class="btn" onclick="validateAndSend()">✅ إرسال الطلب</button>
+            <div class="input-group">
+                <input type="text" id="title" placeholder=" ">
+                <label>عنوان البحث</label>
+                <div class="error-message">عنوان البحث قصير جداً</div>
+            </div>
+
+            <div class="input-group">
+                <input type="date" id="date" placeholder=" ">
+                <label>تاريخ التسليم المطلوب</label>
+                <div class="error-message">يرجى اختيار تاريخ صالح</div>
+            </div>
+
+            <div class="input-group">
+                <select id="feature">
+                    <option value="لا، بحث فقط" selected>بحث فقط (نسخة PDF)</option>
+                    <option value="نعم، أريد شرح جزئيات">شرح إضافي + خطة البحث (Premium)</option>
+                </select>
+                <label>خدمات إضافية</label>
+            </div>
+
+            <div class="actions">
+                <button class="btn btn-secondary" onclick="prevStep(2)">رجوع</button>
+                <button class="btn btn-primary" onclick="nextStep(2)">
+                    التالي
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="step" id="step3">
+            <div class="section-title">مراجعة وتأكيد الطلب</div>
+            
+            <div class="summary-card">
+                <div class="summary-item">
+                    <span class="s-label">الطالب</span>
+                    <span class="s-value" id="s-name">--</span>
+                </div>
+                <div class="summary-item">
+                    <span class="s-label">التخصص</span>
+                    <span class="s-value" id="s-level">--</span>
+                </div>
+                <div class="summary-item">
+                    <span class="s-label">المادة</span>
+                    <span class="s-value" id="s-module">--</span>
+                </div>
+                <div class="summary-item">
+                    <span class="s-label">العنوان</span>
+                    <span class="s-value" id="s-title">--</span>
+                </div>
+                <div class="summary-item">
+                    <span class="s-label">التاريخ</span>
+                    <span class="s-value" id="s-date">--</span>
+                </div>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="terms">
+                <label for="terms">أتعهد بصحة المعلومات وألتزم بدفع الرسوم الرمزية بعد القبول.</label>
+            </div>
+
+            <div class="actions">
+                <button class="btn btn-secondary" onclick="prevStep(3)">تعديل</button>
+                <button class="btn btn-primary" onclick="submitForm()">
+                    ✅ تأكيد وإرسال
+                </button>
+            </div>
+        </div>
+
+    </div>
 </div>
 
 <script>
-    let tg = window.Telegram.WebApp;
+    // --- تهيئة التليجرام ---
+    const tg = window.Telegram.WebApp;
     tg.expand();
+    tg.MainButton.hide();
 
-    // 1. إعدادات ذكية للتاريخ (منع الماضي ومنع المستقبل البعيد)
+    // --- إعدادات التواريخ ---
     const dateInput = document.getElementById('date');
-    const today = new Date();
-    const nextYear = new Date();
-    nextYear.setFullYear(today.getFullYear() + 1);
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.min = today; // منع التواريخ الماضية
 
-    // تنسيق التاريخ ليكون مقبولاً في حقل الإدخال (YYYY-MM-DD)
-    const formatDate = (d) => d.toISOString().split('T')[0];
-    
-    dateInput.min = formatDate(today); // لا يقبل ما قبل اليوم
-    dateInput.max = formatDate(nextYear); // لا يقبل أكثر من سنة قدام
-    dateInput.value = formatDate(today); // القيمة الافتراضية هي اليوم
+    // --- منطق التنقل بين الخطوات ---
+    let currentStep = 1;
 
-    function showError(id, show) {
-        document.getElementById(id).style.display = show ? 'block' : 'none';
-        document.getElementById(id.replace('err-', '')).classList.toggle('error', show);
-        return !show; // يرجع false إذا كان هناك خطأ
+    function updateProgress(step) {
+        const bar = document.getElementById('progressBar');
+        const labels = [document.getElementById('label1'), document.getElementById('label2'), document.getElementById('label3')];
+        
+        // تحديث الشريط الملون
+        const percentage = ((step - 1) / 2) * 100;
+        bar.style.width = percentage === 0 ? '33%' : (step === 2 ? '66%' : '100%');
+
+        // تحديث ألوان النصوص
+        labels.forEach((lbl, idx) => {
+            if(idx + 1 <= step) lbl.classList.add('step-active');
+            else lbl.classList.remove('step-active');
+        });
     }
 
-    function validateAndSend() {
+    function showStep(step) {
+        document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+        document.getElementById(`step${step}`).classList.add('active');
+        updateProgress(step);
+        currentStep = step;
+        
+        // إذا وصلنا للخطوة 3، نملأ الملخص
+        if(step === 3) fillSummary();
+    }
+
+    // --- التحقق من صحة البيانات (Validation) ---
+    function validateStep(step) {
         let valid = true;
+        
+        const setError = (id, hasError) => {
+            const group = document.getElementById(id).closest('.input-group');
+            if(hasError) {
+                group.classList.add('error', 'shake');
+                setTimeout(() => group.classList.remove('shake'), 500);
+                valid = false;
+            } else {
+                group.classList.remove('error');
+            }
+        };
 
-        // جلب القيم
-        let level = document.getElementById("level").value;
-        let module = document.getElementById("module").value.trim();
-        let title = document.getElementById("title").value.trim();
-        let name = document.getElementById("name").value.trim();
-        let phone = document.getElementById("phone").value.trim();
-        let wilaya = document.getElementById("wilaya").value.trim();
-        let dateVal = document.getElementById("date").value;
-        let feature = document.getElementById("feature").value;
+        if (step === 1) {
+            const name = document.getElementById('name').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const wilaya = document.getElementById('wilaya').value.trim();
 
-        // 🧠 1. التحقق من الاسم (حروف فقط، على الأقل كلمتين أو 4 أحرف)
-        // الريجيكس: يقبل الحروف العربية والإنجليزية والمسافات، يرفض الأرقام والرموز
-        let nameRegex = /^[\u0600-\u06FFa-zA-Z\s]{4,}$/;
-        if (!nameRegex.test(name) || name.length < 4 || name === ".") 
-            valid = showError('err-name', true) && valid;
-        else showError('err-name', false);
+            // تحقق الاسم: حروف فقط، أكثر من 5 أحرف
+            const nameRegex = /^[\u0600-\u06FFa-zA-Z\s]{5,}$/;
+            setError('name', !nameRegex.test(name));
 
-        // 🧠 2. التحقق من الهاتف (جزائري 10 أرقام)
-        let phoneRegex = /^(05|06|07)[0-9]{8}$/;
-        if (!phoneRegex.test(phone)) 
-            valid = showError('err-phone', true) && valid;
-        else showError('err-phone', false);
+            // تحقق الهاتف: جزائري
+            const phoneRegex = /^(05|06|07)[0-9]{8}$/;
+            setError('phone', !phoneRegex.test(phone));
 
-        // 🧠 3. التحقق من العنوان والمقياس (الطول)
-        if (module.length < 3) valid = showError('err-module', true) && valid; else showError('err-module', false);
-        if (title.length < 5) valid = showError('err-title', true) && valid; else showError('err-title', false);
-        if (wilaya.length < 3) valid = showError('err-wilaya', true) && valid; else showError('err-wilaya', false);
+            // تحقق الولاية
+            setError('wilaya', wilaya.length < 3);
+        }
 
-        // 🧠 4. التحقق من التاريخ (للتأكد فقط)
-        let selectedDate = new Date(dateVal);
-        let minDate = new Date(dateInput.min);
-        if (selectedDate < minDate) 
-            valid = showError('err-date', true) && valid;
-        else showError('err-date', false);
+        if (step === 2) {
+            const level = document.getElementById('level').value;
+            const module = document.getElementById('module').value.trim();
+            const title = document.getElementById('title').value.trim();
+            const date = document.getElementById('date').value;
 
-        if (valid) {
-            let data = {
-                level: level,
-                module: module,
-                title: title,
-                name: name,
-                phone: phone,
-                wilaya: wilaya,
-                date: dateVal,
-                feature: feature
-            };
-            tg.sendData(JSON.stringify(data));
-        } else {
-            tg.HapticFeedback.notificationOccurred('error'); // اهتزاز عند الخطأ
+            setError('level', level === "");
+            setError('module', module.length < 3);
+            setError('title', title.length < 5);
+            setError('date', date === "");
+        }
+
+        if (!valid) tg.HapticFeedback.notificationOccurred('error');
+        return valid;
+    }
+
+    function nextStep(current) {
+        if (validateStep(current)) {
+            tg.HapticFeedback.selectionChanged();
+            showStep(current + 1);
         }
     }
+
+    function prevStep(current) {
+        tg.HapticFeedback.selectionChanged();
+        showStep(current - 1);
+    }
+
+    function fillSummary() {
+        document.getElementById('s-name').textContent = document.getElementById('name').value;
+        document.getElementById('s-level').textContent = document.getElementById('level').value;
+        document.getElementById('s-module').textContent = document.getElementById('module').value;
+        document.getElementById('s-title').textContent = document.getElementById('title').value;
+        document.getElementById('s-date').textContent = document.getElementById('date').value;
+    }
+
+    // --- الإرسال النهائي ---
+    function submitForm() {
+        const terms = document.getElementById('terms').checked;
+        
+        if (!terms) {
+            tg.showPopup({title: 'تنبيه', message: 'يجب الموافقة على التعهد قبل الإرسال'});
+            tg.HapticFeedback.notificationOccurred('warning');
+            return;
+        }
+
+        const data = {
+            name: document.getElementById('name').value.trim(),
+            phone: document.getElementById('phone').value.trim(),
+            wilaya: document.getElementById('wilaya').value.trim(),
+            level: document.getElementById('level').value,
+            module: document.getElementById('module').value.trim(),
+            title: document.getElementById('title').value.trim(),
+            date: document.getElementById('date').value,
+            feature: document.getElementById('feature').value
+        };
+
+        tg.HapticFeedback.notificationOccurred('success');
+        tg.sendData(JSON.stringify(data));
+    }
+
 </script>
 
 </body>

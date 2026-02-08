@@ -3,624 +3,975 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>SWIMA Research</title>
+<title>SWIMA - البوابة الرسمية</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Cinzel:wght@700;900&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+
 <style>
+/* =========================================
+   1. GLOBAL VARIABLES & RESET
+   ========================================= */
 :root {
-    --primary: #1a237e;
-    --primary-dark: #000051;
-    --accent: #ffd700;
-    --bg-body: #f4f6f9;
+    /* الألوان الأساسية - أزرق ملكي وذهبي */
+    --primary-dark: #0f172a;
+    --primary: #1e3a8a;
+    --primary-light: #3b82f6;
+    --accent: #d4af37;       /* ذهبي */
+    --accent-glow: #fcd34d;
+    
+    /* ألوان الخلفية والنصوص */
+    --bg-body: #f3f4f6;
     --bg-card: #ffffff;
-    --text-main: #2c3e50;
-    --text-light: #95a5a6;
-    --error: #e74c3c;
-    --success: #27ae60;
-    --radius: 24px;
-    --shadow: 0 15px 35px rgba(0,0,0,0.1);
-    --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    --text-main: #111827;
+    --text-muted: #6b7280;
+    
+    /* حالات النظام */
+    --success: #10b981;
+    --error: #ef4444;
+    --warning: #f59e0b;
+    
+    /* تأثيرات الظل والعمق (3D) */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-3d: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    
+    --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+}
 
 body {
-    font-family: 'Cairo', sans-serif;
-    background: var(--bg-body);
+    font-family: 'Cairo', 'Tajawal', sans-serif;
+    background-color: var(--bg-body);
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.05) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(212, 175, 55, 0.08) 0px, transparent 50%);
     color: var(--text-main);
     min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    padding: 20px;
-    background-image: radial-gradient(at 0% 0%, rgba(26, 35, 126, 0.05) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(255, 215, 0, 0.1) 0px, transparent 50%);
+    padding-bottom: 40px;
+    overflow-x: hidden;
 }
 
-.app-wrapper {
-    width: 100%;
-    max-width: 500px;
-    background: var(--bg-card);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    overflow: hidden;
+/* =========================================
+   2. HEADER & BRANDING (3D DESIGN)
+   ========================================= */
+.header-container {
     position: relative;
-    display: flex;
-    flex-direction: column;
-}
-
-header {
-    background: linear-gradient(135deg, #1a2980 0%, #26d0ce 100%); 
-    padding: 30px 20px 140px; 
+    background: linear-gradient(160deg, #0f172a 0%, #1e3a8a 60%, #172554 100%);
+    padding: 50px 20px 100px; /* مساحة سفلية كبيرة للأرقام */
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    box-shadow: 0 10px 30px rgba(30, 58, 138, 0.4);
     text-align: center;
-    color: white;
-    position: relative;
-    border-bottom-left-radius: 50% 30px;
-    border-bottom-right-radius: 50% 30px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    overflow: hidden;
     z-index: 10;
 }
 
-.brand-container {
+/* تأثيرات خلفية متحركة للهيدر */
+.header-bg-effect {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 60%);
+    animation: rotateBg 20s linear infinite;
+    pointer-events: none;
+}
+
+.brand-wrapper {
+    position: relative;
+    z-index: 20;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    position: relative;
-    z-index: 2;
+    transform: translateZ(20px); /* تأثير عمق */
 }
 
-.brand-sticker {
-    width: 90px;
-    height: 90px;
+.logo-img {
+    width: 110px;
+    height: 110px;
     object-fit: contain;
-    filter: drop-shadow(0 8px 15px rgba(0,0,0,0.25));
-    animation: float 4s ease-in-out infinite;
-    margin-bottom: 5px;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+    animation: floatLogo 5s ease-in-out infinite;
+    margin-bottom: 15px;
 }
 
-.brand-name {
+.brand-title {
     font-family: 'Cinzel', serif;
-    font-size: 42px;
+    font-size: 48px;
     font-weight: 900;
-    letter-spacing: 3px;
-    background: linear-gradient(to bottom, #fff 40%, #e0e0e0 100%);
+    letter-spacing: 4px;
+    color: #ffffff;
+    text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    margin: 0;
+    background: linear-gradient(to right, #fff 20%, #d4af37 50%, #fff 80%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    margin-bottom: 2px;
-    text-transform: uppercase;
+    background-size: 200% auto;
+    animation: shineText 5s linear infinite;
 }
 
 .brand-subtitle {
-    font-size: 15px;
-    font-weight: 700;
+    font-size: 16px;
     color: var(--accent);
     letter-spacing: 1px;
+    font-weight: 700;
+    margin-top: 5px;
     text-transform: uppercase;
-    opacity: 0.95;
-    background: rgba(0,0,0,0.2);
-    padding: 4px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 5px 15px;
     border-radius: 20px;
-    backdrop-filter: blur(5px);
+    border: 1px solid rgba(212, 175, 55, 0.3);
 }
 
-.step-indicator {
+/* =========================================
+   3. PROGRESS STEPS (Floating 3D)
+   ========================================= */
+.steps-container {
+    max-width: 500px;
+    margin: -50px auto 30px; /* سحب للأعلى ليتداخل مع الهيدر بشكل صحيح */
+    position: relative;
+    z-index: 30;
+    padding: 0 30px;
+}
+
+.progress-bar-bg {
+    position: absolute;
+    top: 50%;
+    left: 60px;
+    right: 60px;
+    height: 6px;
+    background: #e5e7eb;
+    transform: translateY(-50%);
+    border-radius: 10px;
+    z-index: 1;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.progress-bar-fill {
+    position: absolute;
+    top: 50%;
+    left: 60px;
+    height: 6px;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+    transform: translateY(-50%);
+    border-radius: 10px;
+    z-index: 2;
+    width: 0%;
+    transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.steps-wrapper {
     display: flex;
     justify-content: space-between;
-    padding: 0 50px;
-    margin-top: -85px; 
     position: relative;
-    z-index: 20;
+    z-index: 3;
 }
 
-.step-dot {
+.step-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.step-circle {
     width: 55px;
     height: 55px;
     background: var(--bg-card);
     border-radius: 50%;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     font-weight: 800;
-    color: #bdc3c7;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    border: 4px solid #fff;
+    color: var(--text-muted);
+    font-size: 18px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    border: 4px solid #ffffff;
     transition: var(--transition);
-    font-size: 16px;
     position: relative;
 }
 
-.step-dot.active {
+.step-circle.active {
     background: var(--primary);
-    color: #fff;
-    transform: translateY(-5px);
-    box-shadow: 0 12px 20px rgba(26, 35, 126, 0.3);
-    border-color: #fff;
+    color: #ffffff;
+    border-color: var(--accent);
+    transform: translateY(-10px) scale(1.1);
+    box-shadow: 0 15px 30px rgba(30, 58, 138, 0.3);
 }
 
-.step-dot.completed {
+.step-circle.completed {
     background: var(--success);
-    color: #fff;
-    border-color: #fff;
+    color: #ffffff;
+    border-color: #ffffff;
 }
 
-.progress-line-bg {
-    position: absolute;
-    top: 50%;
-    left: 70px;
-    right: 70px;
-    height: 5px;
-    background: #ecf0f1;
-    z-index: -1;
-    transform: translateY(-50%);
-    border-radius: 10px;
+.step-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-muted);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: var(--transition);
 }
 
-.progress-line-fill {
-    position: absolute;
-    top: 50%;
-    left: 70px;
-    height: 5px;
-    background: var(--success);
-    z-index: -1;
-    transform: translateY(-50%);
-    transition: width 0.5s ease;
-    width: 0%;
-    border-radius: 10px;
+.step-circle.active + .step-label {
+    opacity: 1;
+    transform: translateY(0);
+    color: var(--primary);
 }
 
-form {
-    padding: 60px 25px 30px;
-    flex: 1;
+/* =========================================
+   4. FORM CONTAINER & CARDS
+   ========================================= */
+.main-container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 0 20px;
+    perspective: 1000px; /* لتمكين تأثيرات 3D */
 }
 
-.step-content {
+.form-step {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: 30px 25px;
+    box-shadow: var(--shadow-3d);
     display: none;
-    animation: slideUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transform-origin: top center;
+    animation: rotateIn 0.6s ease-out;
+    border: 1px solid rgba(255,255,255,0.8);
 }
 
-.step-content.active { display: block; }
+.form-step.active {
+    display: block;
+}
 
-.section-title {
-    font-size: 20px;
+.step-title {
+    font-size: 22px;
     font-weight: 800;
     color: var(--primary);
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     position: relative;
     padding-right: 15px;
 }
 
-.section-title::before {
+.step-title::before {
     content: '';
     position: absolute;
     right: 0;
-    top: 5px;
-    bottom: 5px;
-    width: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 5px;
+    height: 25px;
     background: var(--accent);
     border-radius: 4px;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
 }
 
-.input-wrapper { position: relative; margin-bottom: 25px; }
+/* =========================================
+   5. INPUT FIELDS (Modern & Interactive)
+   ========================================= */
+.input-group {
+    margin-bottom: 25px;
+    position: relative;
+}
 
-.input-field {
+.input-control {
     width: 100%;
     padding: 18px 20px;
     font-size: 16px;
-    border: 2px solid #f0f0f0;
+    background: #f9fafb;
+    border: 2px solid #e5e7eb;
     border-radius: 16px;
-    background: #fcfcfc;
-    transition: var(--transition);
-    font-family: 'Cairo', sans-serif;
     color: var(--text-main);
     font-weight: 600;
+    transition: var(--transition);
+    font-family: 'Cairo', sans-serif;
 }
 
-.input-field:focus {
+.input-control:focus {
+    background: #ffffff;
     border-color: var(--primary);
-    background: #fff;
-    box-shadow: 0 5px 20px rgba(26, 35, 126, 0.08);
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
     transform: translateY(-2px);
 }
 
-.input-wrapper label {
+.input-label {
     position: absolute;
-    top: 50%;
     right: 20px;
+    top: 50%;
     transform: translateY(-50%);
-    color: #95a5a6;
+    color: #9ca3af;
     font-size: 15px;
     transition: var(--transition);
     pointer-events: none;
     background: transparent;
-    padding: 0 5px;
+    padding: 0 4px;
 }
 
-.input-field:focus ~ label,
-.input-field:not(:placeholder-shown) ~ label {
-    top: 0;
+.input-control:focus ~ .input-label,
+.input-control:not(:placeholder-shown) ~ .input-label {
+    top: -2px;
+    right: 15px;
     font-size: 12px;
     color: var(--primary);
     background: var(--bg-card);
     font-weight: 700;
 }
 
-.input-field.error { border-color: var(--error); background: #fff8f8; }
-.input-field.error ~ label { color: var(--error); }
-.error-msg { color: var(--error); font-size: 12px; margin-top: 8px; display: none; font-weight: 700; padding-right: 10px; }
-
-select.input-field {
-    appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a237e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: left 20px center;
-    background-size: 18px;
+.error-txt {
+    color: var(--error);
+    font-size: 12px;
+    margin-top: 6px;
+    font-weight: 700;
+    display: none;
+    padding-right: 10px;
 }
 
-.btn-group { display: flex; gap: 15px; margin-top: 40px; }
+.input-control.error {
+    border-color: var(--error);
+    background-color: #fef2f2;
+}
+
+/* Custom Select Arrow */
+select.input-control {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%231e3a8a'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: left 20px center;
+    background-size: 20px;
+}
+
+/* =========================================
+   6. PRICING CARD (New Feature)
+   ========================================= */
+.pricing-display {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border: 1px solid #bae6fd;
+    border-radius: 16px;
+    padding: 20px;
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: fadeIn 0.5s ease;
+}
+
+.price-label {
+    font-size: 14px;
+    color: #0369a1;
+    font-weight: 700;
+}
+
+.price-value {
+    font-size: 24px;
+    color: var(--primary);
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 900;
+}
+
+/* =========================================
+   7. BUTTONS & ACTIONS
+   ========================================= */
+.actions-row {
+    display: flex;
+    gap: 15px;
+    margin-top: 40px;
+}
 
 .btn {
     flex: 1;
-    padding: 18px;
-    border: none;
+    padding: 16px;
     border-radius: 16px;
     font-family: 'Cairo', sans-serif;
-    font-weight: 700;
     font-size: 16px;
+    font-weight: 700;
+    border: none;
     cursor: pointer;
-    transition: var(--transition);
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
 }
+
+/* Ripple Effect Overlay */
+.btn::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(255,255,255,0.1);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.btn:active::after { opacity: 1; }
 
 .btn-primary {
-    background: var(--primary);
-    color: white;
-    box-shadow: 0 10px 25px rgba(26, 35, 126, 0.25);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: #ffffff;
+    box-shadow: 0 10px 20px rgba(30, 58, 138, 0.25);
 }
 
-.btn-primary:active { transform: scale(0.96); }
-.btn-secondary { background: #f0f2f5; color: var(--text-light); }
-
-.summary-box {
-    background: #f8fbff;
-    border-radius: 18px;
-    padding: 25px;
-    border: 1px solid #eef2f7;
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 25px rgba(30, 58, 138, 0.35);
 }
 
-.summary-row {
+.btn-secondary {
+    background: #e5e7eb;
+    color: var(--text-muted);
+}
+
+.btn-secondary:hover { background: #d1d5db; color: var(--text-main); }
+
+/* =========================================
+   8. THE CONTRACT (PDF PREVIEW)
+   ========================================= */
+.contract-modal {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+.contract-modal.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.contract-paper {
+    background: #fff;
+    width: 100%;
+    max-width: 450px;
+    /* أبعاد تقريبية لـ A4 مصغرة */
+    min-height: 600px; 
+    padding: 30px;
+    border-radius: 4px;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    font-family: 'Tajawal', serif;
+    color: #000;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    max-height: 90vh;
+}
+
+/* إطار العقد المزخرف */
+.contract-border {
+    border: 3px double var(--primary);
+    height: 100%;
+    padding: 20px;
+    position: relative;
+}
+
+/* العلامة المائية */
+.watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    opacity: 0.08;
+    pointer-events: none;
+}
+
+.contract-header {
+    text-align: center;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.contract-title {
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--primary);
+    text-transform: uppercase;
+}
+
+.contract-body {
+    font-size: 14px;
+    line-height: 1.8;
+    text-align: justify;
+}
+
+.contract-row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 15px;
-    padding-bottom: 15px;
-    border-bottom: 1px dashed #dbe2ef;
+    margin: 10px 0;
+    border-bottom: 1px dashed #ccc;
+    padding-bottom: 5px;
 }
-.summary-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-.s-label { color: #8fa1b3; font-size: 13px; font-weight: 600; }
-.s-value { color: var(--primary); font-weight: 700; font-size: 15px; }
 
-.checkbox-wrapper {
+.c-val { font-weight: 700; color: var(--primary-dark); }
+
+.contract-footer {
+    margin-top: auto;
+    padding-top: 30px;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 15px;
-    margin-top: 30px;
-    padding: 15px;
-    background: #f0fff4;
-    border-radius: 14px;
-    border: 1px solid #c6f6d5;
 }
-.checkbox-wrapper input { width: 22px; height: 22px; accent-color: var(--success); cursor: pointer; }
-.checkbox-wrapper label { font-size: 13px; font-weight: 600; color: #2d3748; cursor: pointer; line-height: 1.5; }
 
+.stamp-box {
+    width: 80px;
+    height: 80px;
+    border: 2px solid var(--primary);
+    border-radius: 50%;
+    color: var(--primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+    font-weight: 700;
+    transform: rotate(-15deg);
+    opacity: 0.8;
+    text-align: center;
+}
+
+.contract-actions {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+/* =========================================
+   9. ANIMATIONS & UTILS
+   ========================================= */
+@keyframes rotateBg { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@keyframes floatLogo { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes shineText { 0% { background-position: -200%; } 100% { background-position: 200%; } }
+@keyframes rotateIn { from { opacity: 0; transform: perspective(1000px) rotateX(-10deg) translateY(20px); } to { opacity: 1; transform: perspective(1000px) rotateX(0) translateY(0); } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-5px); } 40%, 80% { transform: translateX(5px); } }
+.shake { animation: shake 0.4s ease-in-out; }
+
+/* Toast Notification */
 .toast {
     position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%) translateY(-100px);
-    background: #2d3436;
-    color: #fff;
-    padding: 14px 25px;
-    border-radius: 50px;
-    font-size: 14px;
-    font-weight: 600;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    z-index: 1000;
+    top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
+    background: #111; color: #fff;
+    padding: 12px 24px; border-radius: 50px;
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 600; font-size: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    z-index: 2000; transition: all 0.4s;
     opacity: 0;
-    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    display: flex;
-    align-items: center;
-    gap: 12px;
 }
-.toast.visible { transform: translateX(-50%) translateY(0); opacity: 1; }
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 .toast.success { background: var(--success); }
 .toast.error { background: var(--error); }
 
-@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
-.shake { animation: shake 0.4s ease-in-out; }
+/* إخفاء العنصر الذي سيتم طباعته */
+#element-to-print { display: none; }
 
 </style>
 </head>
 <body>
 
 <div class="toast" id="toast">
-    <span id="toastIcon"></span>
-    <span id="toastMsg"></span>
+    <span id="toast-icon"></span>
+    <span id="toast-msg"></span>
 </div>
 
-<div class="app-wrapper">
-    <header>
-        <div class="brand-container">
-            <img src="sticker.webp" alt="Logo" class="brand-sticker">
-            <div class="brand-name">SWIMA</div>
-            <div class="brand-subtitle">للبحوث الأكاديمية</div>
-        </div>
-        
-        <div class="step-indicator">
-            <div class="progress-line-bg"></div>
-            <div class="progress-line-fill" id="progressFill"></div>
-            <div class="step-dot active" id="dot1">1</div>
-            <div class="step-dot" id="dot2">2</div>
-            <div class="step-dot" id="dot3">3</div>
-        </div>
-    </header>
+<div class="header-container">
+    <div class="header-bg-effect"></div>
+    <div class="brand-wrapper">
+        <img src="sticker.webp" alt="SWIMA Logo" class="logo-img">
+        <h1 class="brand-title">SWIMA</h1>
+        <div class="brand-subtitle">للبحوث الأكاديمية</div>
+    </div>
+</div>
 
-    <form onsubmit="return false;">
+<div class="steps-container">
+    <div class="progress-bar-bg"></div>
+    <div class="progress-bar-fill" id="progress-fill"></div>
+    <div class="steps-wrapper">
+        <div class="step-item">
+            <div class="step-circle active" id="circle-1">1</div>
+            <span class="step-label">الطالب</span>
+        </div>
+        <div class="step-item">
+            <div class="step-circle" id="circle-2">2</div>
+            <span class="step-label">البحث</span>
+        </div>
+        <div class="step-item">
+            <div class="step-circle" id="circle-3">3</div>
+            <span class="step-label">التأكيد</span>
+        </div>
+    </div>
+</div>
+
+<div class="main-container">
+    <form id="researchForm" onsubmit="return false;">
         
-        <div class="step-content active" id="step1">
-            <div class="section-title">المعلومات الشخصية</div>
+        <div class="form-step active" id="step-1">
+            <h2 class="step-title">من هو صاحب الطلب؟</h2>
             
-            <div class="input-wrapper">
-                <input type="text" id="name" class="input-field" placeholder=" " autocomplete="off">
-                <label>الاسم الكامل</label>
-                <div class="error-msg" id="err-name">يرجى كتابة الاسم (حروف فقط)</div>
+            <div class="input-group">
+                <input type="text" id="name" class="input-control" placeholder=" " autocomplete="off">
+                <label class="input-label">الاسم الكامل (الثلاثي أو المركب)</label>
+                <div class="error-txt" id="err-name">يرجى كتابة الاسم بشكل صحيح</div>
             </div>
 
-            <div class="input-wrapper">
-                <input type="tel" id="phone" class="input-field" placeholder=" " maxlength="10" inputmode="numeric">
-                <label>رقم الهاتف</label>
-                <div class="error-msg" id="err-phone">رقم غير صحيح (05, 06, 07)</div>
+            <div class="input-group">
+                <input type="tel" id="phone" class="input-control" placeholder=" " maxlength="10" inputmode="numeric">
+                <label class="input-label">رقم الهاتف (للتواصل)</label>
+                <div class="error-txt" id="err-phone">رقم الهاتف يجب أن يبدأ بـ 05, 06, 07</div>
             </div>
 
-            <div class="input-wrapper">
-                <input type="text" id="wilaya" class="input-field" placeholder=" ">
-                <label>الولاية</label>
-                <div class="error-msg" id="err-wilaya">يرجى كتابة الولاية</div>
+            <div class="input-group">
+                <input type="text" id="wilaya" class="input-control" placeholder=" ">
+                <label class="input-label">الولاية</label>
+                <div class="error-txt" id="err-wilaya">الولاية مطلوبة</div>
             </div>
 
-            <div class="btn-group">
+            <div class="actions-row">
                 <button class="btn btn-primary" onclick="nextStep(1)">
-                    المتابعة
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    التالي
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </button>
             </div>
         </div>
 
-        <div class="step-content" id="step2">
-            <div class="section-title">تفاصيل الطلب</div>
+        <div class="form-step" id="step-2">
+            <h2 class="step-title">ماذا تريد أن نبحث لك؟</h2>
 
-            <div class="input-wrapper">
-                <select id="level" class="input-field">
+            <div class="input-group">
+                <select id="level" class="input-control">
                     <option value="" disabled selected></option>
                     <option value="سنة أولى حقوق">سنة أولى حقوق</option>
                     <option value="سنة ثانية حقوق">سنة ثانية حقوق</option>
                     <option value="سنة ثالثة (قانون خاص)">سنة ثالثة (قانون خاص)</option>
                     <option value="سنة ثالثة (قانون عام)">سنة ثالثة (قانون عام)</option>
                 </select>
-                <label>المستوى الدراسي</label>
-                <div class="error-msg" id="err-level">يجب اختيار المستوى</div>
+                <label class="input-label">المستوى الدراسي</label>
+                <div class="error-txt" id="err-level">اختر المستوى</div>
             </div>
 
-            <div class="input-wrapper">
-                <input type="text" id="module" class="input-field" placeholder=" ">
-                <label>المقياس (المادة)</label>
-                <div class="error-msg" id="err-module">اسم المقياس مطلوب</div>
+            <div class="input-group">
+                <input type="text" id="module" class="input-control" placeholder=" ">
+                <label class="input-label">المقياس (المادة)</label>
+                <div class="error-txt" id="err-module">المقياس مطلوب</div>
             </div>
 
-            <div class="input-wrapper">
-                <input type="text" id="title" class="input-field" placeholder=" ">
-                <label>عنوان البحث</label>
-                <div class="error-msg" id="err-title">عنوان البحث قصير جداً</div>
+            <div class="input-group">
+                <input type="text" id="title" class="input-control" placeholder=" ">
+                <label class="input-label">عنوان البحث</label>
+                <div class="error-txt" id="err-title">العنوان قصير جداً</div>
             </div>
 
-            <div class="input-wrapper">
-                <input type="date" id="date" class="input-field" placeholder=" ">
-                <label>تاريخ التسليم</label>
-                <div class="error-msg" id="err-date">تاريخ غير صالح</div>
+            <div class="input-group">
+                <input type="date" id="date" class="input-control" placeholder=" ">
+                <label class="input-label">تاريخ التسليم</label>
+                <div class="error-txt" id="err-date">تاريخ غير صالح</div>
             </div>
 
-            <div class="input-wrapper">
-                <select id="feature" class="input-field">
-                    <option value="لا، بحث فقط" selected>بحث فقط (PDF)</option>
-                    <option value="نعم، أريد شرح جزئيات">شرح إضافي + خطة (Premium)</option>
+            <div class="input-group">
+                <select id="feature" class="input-control" onchange="updatePrice()">
+                    <option value="لا، بحث فقط" selected>بحث أكاديمي فقط (PDF)</option>
+                    <option value="نعم، أريد شرح جزئيات">بحث + شرح + خطة عمل (Premium)</option>
                 </select>
-                <label>خدمات إضافية</label>
+                <label class="input-label">نوع الخدمة</label>
             </div>
 
-            <div class="btn-group">
+            <div class="pricing-display">
+                <span class="price-label">تكلفة الخدمة المقدرة:</span>
+                <span class="price-value" id="price-tag">500 د.ج</span>
+            </div>
+
+            <div class="actions-row">
                 <button class="btn btn-secondary" onclick="prevStep(2)">رجوع</button>
                 <button class="btn btn-primary" onclick="nextStep(2)">
                     متابعة
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </button>
             </div>
         </div>
 
-        <div class="step-content" id="step3">
-            <div class="section-title">تأكيد البيانات</div>
+        <div class="form-step" id="step-3">
+            <h2 class="step-title">مراجعة نهائية</h2>
             
-            <div class="summary-box">
-                <div class="summary-row">
-                    <span class="s-label">الطالب</span>
-                    <span class="s-value" id="res-name"></span>
+            <div style="background: #f8fbff; border-radius: 12px; padding: 20px; border: 1px dashed #bfdbfe;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px;">
+                    <span style="color:#666; font-size:13px;">الاسم:</span>
+                    <span id="rv-name" style="font-weight:700; color:#1e3a8a;"></span>
                 </div>
-                <div class="summary-row">
-                    <span class="s-label">الهاتف</span>
-                    <span class="s-value" id="res-phone" style="direction: ltr;"></span>
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px;">
+                    <span style="color:#666; font-size:13px;">العنوان:</span>
+                    <span id="rv-title" style="font-weight:700; color:#1e3a8a;"></span>
                 </div>
-                <div class="summary-row">
-                    <span class="s-label">التخصص</span>
-                    <span class="s-value" id="res-level"></span>
-                </div>
-                <div class="summary-row">
-                    <span class="s-label">المادة</span>
-                    <span class="s-value" id="res-module"></span>
-                </div>
-                <div class="summary-row">
-                    <span class="s-label">العنوان</span>
-                    <span class="s-value" id="res-title"></span>
-                </div>
-                <div class="summary-row">
-                    <span class="s-label">التاريخ</span>
-                    <span class="s-value" id="res-date"></span>
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px; border-bottom:1px solid #eee; padding-bottom:5px;">
+                    <span style="color:#666; font-size:13px;">السعر النهائي:</span>
+                    <span id="rv-price" style="font-weight:900; color:#d4af37;"></span>
                 </div>
             </div>
 
-            <div class="checkbox-wrapper">
-                <input type="checkbox" id="terms">
-                <label for="terms">أتعهد بصحة المعلومات وألتزم بدفع الرسوم بعد القبول.</label>
+            <div style="margin-top: 20px; display:flex; gap:10px; align-items:center;">
+                <input type="checkbox" id="terms" style="width:20px; height:20px; accent-color:var(--primary);">
+                <label for="terms" style="font-size:13px; font-weight:600;">أؤكد البيانات وألتزم بالدفع بعد القبول.</label>
             </div>
 
-            <div class="btn-group">
+            <div class="actions-row">
                 <button class="btn btn-secondary" onclick="prevStep(3)">تعديل</button>
-                <button class="btn btn-primary" onclick="submitData()">
-                    ✅ تأكيد وإرسال
+                <button class="btn btn-primary" onclick="generateContract()">
+                    إصدار طلب البحث
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </button>
             </div>
         </div>
-
     </form>
 </div>
 
+<div class="contract-modal" id="contractModal">
+    <div class="contract-paper" id="contractContent">
+        <div class="contract-border">
+            <img src="sticker.webp" class="watermark">
+            
+            <div class="contract-header">
+                <img src="sticker.webp" style="width:60px; margin-bottom:10px;">
+                <div class="contract-title">وثيقة طلب بحث</div>
+                <div style="font-size:12px; color:#666;">Ref: SW-2026-<span id="c-ref"></span></div>
+            </div>
+
+            <div class="contract-body">
+                <p>تشهد منصة <strong>SWIMA للبحوث الأكاديمية</strong> بأن الطلب التالي قد تم تسجيله رسمياً في النظام:</p>
+                <br>
+                <div class="contract-row"><span>صاحب الطلب:</span> <span class="c-val" id="c-name"></span></div>
+                <div class="contract-row"><span>رقم الهاتف:</span> <span class="c-val" id="c-phone"></span></div>
+                <div class="contract-row"><span>الولاية:</span> <span class="c-val" id="c-wilaya"></span></div>
+                <br>
+                <div class="contract-row"><span>موضوع البحث:</span> <span class="c-val" id="c-title"></span></div>
+                <div class="contract-row"><span>المقياس:</span> <span class="c-val" id="c-module"></span></div>
+                <div class="contract-row"><span>نوع الخدمة:</span> <span class="c-val" id="c-feature"></span></div>
+                <br>
+                <div class="contract-row" style="background:#f0f9ff; padding:5px;">
+                    <span>المبلغ المستحق:</span> 
+                    <span class="c-val" style="color:#d4af37; font-size:16px;" id="c-price"></span>
+                </div>
+                <br>
+                <p style="font-size:12px; color:#888;">* يرجى إرسال وصل الدفع + هذه الوثيقة لمسؤول البوت لبدء العمل.</p>
+            </div>
+
+            <div class="contract-footer">
+                <div style="font-size:12px;">
+                    حرر بتاريخ: <span id="c-date-now"></span><br>
+                    تاريخ التسليم: <span id="c-deadline"></span>
+                </div>
+                <div class="stamp-box">
+                    SWIMA<br>APPROVED<br>2026
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div style="position: absolute; bottom: 20px; display: flex; gap: 10px; width: 90%; max-width: 450px;">
+        <button class="btn btn-secondary" onclick="closeContract()">إغلاق</button>
+        <button class="btn btn-primary" onclick="downloadPDF()">
+            تحميل PDF وإرسال للبوت
+        </button>
+    </div>
+</div>
+
 <script>
+    // --- إعدادات النظام ---
     const tg = window.Telegram.WebApp;
     tg.expand();
-    tg.ready();
+    
+    // تاريخ اليوم للأدوات
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('date').min = today;
+    document.getElementById('c-date-now').innerText = today;
 
-    const dateInput = document.getElementById('date');
-    dateInput.min = new Date().toISOString().split('T')[0];
-
-    function showToast(msg, type) {
-        const toast = document.getElementById('toast');
-        const icon = document.getElementById('toastIcon');
-        const text = document.getElementById('toastMsg');
-        
-        toast.className = `toast visible ${type}`;
-        icon.innerHTML = type === 'error' ? '⚠️' : '🎉';
-        text.textContent = msg;
-        
-        if (type === 'error') tg.HapticFeedback.notificationOccurred('error');
-        else tg.HapticFeedback.notificationOccurred('success');
-
-        setTimeout(() => toast.classList.remove('visible'), 3000);
-    }
-
-    function validateField(id, condition) {
-        const el = document.getElementById(id);
-        const err = document.getElementById(`err-${id}`);
-        const parent = el.closest('.input-wrapper');
-        
-        if (!condition) {
-            parent.classList.add('shake');
-            el.classList.add('error');
-            err.style.display = 'block';
-            setTimeout(() => parent.classList.remove('shake'), 400);
-            return false;
+    // --- منطق السعر ---
+    function updatePrice() {
+        const feature = document.getElementById('feature').value;
+        const priceTag = document.getElementById('price-tag');
+        if(feature.includes("شرح")) {
+            priceTag.innerHTML = "700 د.ج";
+            priceTag.style.color = "#d4af37"; // ذهبي
+        } else {
+            priceTag.innerHTML = "500 د.ج";
+            priceTag.style.color = "#1e3a8a"; // أزرق
         }
-        el.classList.remove('error');
-        err.style.display = 'none';
-        return true;
     }
 
-    function nextStep(currentStep) {
-        let isValid = true;
+    // --- التنقل بين الخطوات ---
+    function nextStep(current) {
+        if(validateStep(current)) {
+            // تحديث شريط التقدم
+            const next = current + 1;
+            document.getElementById(`step-${current}`).classList.remove('active');
+            document.getElementById(`step-${next}`).classList.add('active');
+            
+            // تحديث الدوائر
+            document.getElementById(`circle-${current}`).classList.add('completed');
+            document.getElementById(`circle-${current}`).innerHTML = '✓';
+            document.getElementById(`circle-${next}`).classList.add('active');
+            
+            // تحديث الخط الملون
+            const width = next === 2 ? '50%' : '100%';
+            document.getElementById('progress-fill').style.width = width;
+
+            if(next === 3) populateReview();
+        }
+    }
+
+    function prevStep(current) {
+        const prev = current - 1;
+        document.getElementById(`step-${current}`).classList.remove('active');
+        document.getElementById(`step-${prev}`).classList.add('active');
         
-        if (currentStep === 1) {
+        document.getElementById(`circle-${prev}`).classList.remove('completed');
+        document.getElementById(`circle-${prev}`).innerHTML = prev;
+        document.getElementById(`circle-${current}`).classList.remove('active');
+        
+        const width = prev === 1 ? '0%' : '50%';
+        document.getElementById('progress-fill').style.width = width;
+    }
+
+    // --- التحقق من البيانات ---
+    function validateStep(step) {
+        let isValid = true;
+        const setError = (id, condition) => {
+            const el = document.getElementById(id);
+            const err = document.getElementById(`err-${id}`);
+            if(!condition) {
+                el.classList.add('error');
+                err.style.display = 'block';
+                // هز العنصر
+                el.parentElement.classList.add('shake');
+                setTimeout(()=>el.parentElement.classList.remove('shake'), 400);
+                isValid = false;
+            } else {
+                el.classList.remove('error');
+                err.style.display = 'none';
+            }
+        };
+
+        if(step === 1) {
             const name = document.getElementById('name').value.trim();
             const phone = document.getElementById('phone').value.trim();
             const wilaya = document.getElementById('wilaya').value.trim();
-
-            const nameRegex = /^[\u0600-\u06FFa-zA-Z\s]{2,}$/;
-            const phoneRegex = /^(05|06|07)[0-9]{8}$/;
-
-            isValid = validateField('name', nameRegex.test(name)) && isValid;
-            isValid = validateField('phone', phoneRegex.test(phone)) && isValid;
-            isValid = validateField('wilaya', wilaya.length >= 3) && isValid;
-        } 
-        else if (currentStep === 2) {
-            const level = document.getElementById('level').value;
-            const module = document.getElementById('module').value.trim();
-            const title = document.getElementById('title').value.trim();
-            const date = document.getElementById('date').value;
-
-            isValid = validateField('level', level !== "") && isValid;
-            isValid = validateField('module', module.length >= 2) && isValid;
-            isValid = validateField('title', title.length >= 4) && isValid;
-            isValid = validateField('date', date !== "") && isValid;
+            
+            // قبول الاسم المركب (على الأقل حرفين ومسافة وحرفين) أو كلمة واحدة طويلة
+            setError('name', name.length >= 4); 
+            setError('phone', /^(05|06|07)[0-9]{8}$/.test(phone));
+            setError('wilaya', wilaya.length > 2);
+        }
+        else if(step === 2) {
+            setError('level', document.getElementById('level').value !== "");
+            setError('module', document.getElementById('module').value.length > 1);
+            setError('title', document.getElementById('title').value.length > 4);
+            setError('date', document.getElementById('date').value !== "");
         }
 
-        if (isValid) {
-            if (currentStep === 2) updateSummary();
-            goToStep(currentStep + 1);
-        } else {
-            showToast('يرجى التحقق من الحقول المطلوبة', 'error');
-        }
+        if(!isValid) showToast("يرجى تصحيح الأخطاء", "error");
+        return isValid;
     }
 
-    function prevStep(step) { goToStep(step - 1); }
-
-    function goToStep(step) {
-        document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
-        document.getElementById(`step${step}`).classList.add('active');
-
-        document.querySelectorAll('.step-dot').forEach((dot, idx) => {
-            dot.className = 'step-dot';
-            dot.innerHTML = idx + 1;
-            if (idx + 1 < step) { dot.classList.add('completed'); dot.innerHTML = '✓'; }
-            else if (idx + 1 === step) dot.classList.add('active');
-        });
-
-        const progress = document.getElementById('progressFill');
-        progress.style.width = step === 1 ? '0%' : step === 2 ? '50%' : '100%';
-        
-        tg.HapticFeedback.selectionChanged();
+    // --- تعبئة المراجعة ---
+    function populateReview() {
+        document.getElementById('rv-name').innerText = document.getElementById('name').value;
+        document.getElementById('rv-title').innerText = document.getElementById('title').value;
+        document.getElementById('rv-price').innerText = document.getElementById('price-tag').innerText;
     }
 
-    function updateSummary() {
-        document.getElementById('res-name').textContent = document.getElementById('name').value;
-        document.getElementById('res-phone').textContent = document.getElementById('phone').value;
-        document.getElementById('res-level').textContent = document.getElementById('level').value;
-        document.getElementById('res-module').textContent = document.getElementById('module').value;
-        document.getElementById('res-title').textContent = document.getElementById('title').value;
-        document.getElementById('res-date').textContent = document.getElementById('date').value;
-    }
-
-    function submitData() {
-        if (!document.getElementById('terms').checked) {
-            showToast('يجب الموافقة على الشروط', 'error');
-            const wrap = document.querySelector('.checkbox-wrapper');
-            wrap.classList.add('shake');
-            setTimeout(() => wrap.classList.remove('shake'), 400);
+    // --- توليد العقد (الخطوة الأخيرة) ---
+    function generateContract() {
+        if(!document.getElementById('terms').checked) {
+            showToast("يجب الموافقة على الشروط", "error");
             return;
         }
 
-        const data = {
-            name: document.getElementById('name').value.trim(),
-            phone: document.getElementById('phone').value.trim(),
-            wilaya: document.getElementById('wilaya').value.trim(),
-            level: document.getElementById('level').value,
-            module: document.getElementById('module').value.trim(),
-            title: document.getElementById('title').value.trim(),
-            date: document.getElementById('date').value,
-            feature: document.getElementById('feature').value
+        // تعبئة بيانات العقد
+        document.getElementById('c-ref').innerText = Math.floor(Math.random() * 10000);
+        document.getElementById('c-name').innerText = document.getElementById('name').value;
+        document.getElementById('c-phone').innerText = document.getElementById('phone').value;
+        document.getElementById('c-wilaya').innerText = document.getElementById('wilaya').value;
+        document.getElementById('c-title').innerText = document.getElementById('title').value;
+        document.getElementById('c-module').innerText = document.getElementById('module').value;
+        document.getElementById('c-feature').innerText = document.getElementById('feature').value;
+        document.getElementById('c-price').innerText = document.getElementById('price-tag').innerText;
+        document.getElementById('c-deadline').innerText = document.getElementById('date').value;
+
+        // إظهار النافذة
+        document.getElementById('contractModal').classList.add('visible');
+    }
+
+    function closeContract() {
+        document.getElementById('contractModal').classList.remove('visible');
+    }
+
+    // --- تحميل PDF والإرسال للبوت ---
+    function downloadPDF() {
+        const element = document.getElementById('contractContent');
+        const opt = {
+            margin:       0.5,
+            filename:     'Swima_Contract.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2 },
+            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
         };
 
-        showToast('جاري إرسال الطلب...', 'success');
-        setTimeout(() => tg.sendData(JSON.stringify(data)), 800);
+        // 1. توليد وتحميل PDF
+        html2pdf().set(opt).from(element).save().then(() => {
+            // 2. إرسال البيانات للبوت بعد التحميل
+            submitToBot();
+        });
     }
+
+    function submitToBot() {
+        const data = {
+            name: document.getElementById('name').value,
+            phone: document.getElementById('phone').value,
+            wilaya: document.getElementById('wilaya').value,
+            level: document.getElementById('level').value,
+            module: document.getElementById('module').value,
+            title: document.getElementById('title').value,
+            date: document.getElementById('date').value,
+            feature: document.getElementById('feature').value,
+            price: document.getElementById('price-tag').innerText
+        };
+        
+        // إرسال البيانات للتليجرام
+        tg.sendData(JSON.stringify(data));
+    }
+
+    // --- أدوات مساعدة ---
+    function showToast(msg, type) {
+        const t = document.getElementById('toast');
+        t.innerHTML = (type==='error'?'⚠️ ':'🎉 ') + msg;
+        t.className = `toast show ${type}`;
+        setTimeout(()=>t.className = 'toast', 3000);
+        tg.HapticFeedback.notificationOccurred(type);
+    }
+
 </script>
 </body>
 </html>

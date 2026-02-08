@@ -1,383 +1,474 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>منصة البحوث القانونية</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-    
-    <style>
-        /* --- المتغيرات والتأسيس --- */
-        :root {
-            --primary-color: #1a237e; /* أزرق ملكي */
-            --secondary-color: #c5a059; /* ذهبي قانوني */
-            --bg-color: #f8f9fa;
-            --surface-color: #ffffff;
-            --text-primary: #2c3e50;
-            --text-secondary: #7f8c8d;
-            --error-color: #e74c3c;
-            --success-color: #27ae60;
-            --border-radius: 16px;
-            --shadow: 0 10px 30px rgba(0,0,0,0.08);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SWIMA Research</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+    --primary-hue: 210;
+    --primary: hsl(var(--primary-hue), 100%, 25%);
+    --primary-light: hsl(var(--primary-hue), 80%, 60%);
+    --accent: #d4af37;
+    --accent-light: #f3e5ab;
+    --bg-body: #f0f2f5;
+    --bg-card: #ffffff;
+    --text-main: #1a1a1a;
+    --text-light: #666666;
+    --error: #e74c3c;
+    --success: #2ecc71;
+    --radius: 20px;
+    --shadow: 0 10px 40px -10px rgba(0,0,0,0.15);
+    --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-        * {
-            box-sizing: border-box;
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-        }
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+    margin: 0;
+    padding: 0;
+}
 
-        body {
-            font-family: 'Cairo', sans-serif;
-            background-color: var(--tg-theme-bg-color, var(--bg-color));
-            color: var(--tg-theme-text-color, var(--text-primary));
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding-top: 20px;
-        }
+body {
+    font-family: 'Cairo', sans-serif;
+    background: var(--bg-body);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+    background-image: radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 20%), radial-gradient(circle at 90% 80%, rgba(0, 50, 150, 0.05) 0%, transparent 20%);
+}
 
-        .app-container {
-            width: 100%;
-            max-width: 500px;
-            background: var(--tg-theme-secondary-bg-color, var(--surface-color));
-            border-radius: var(--border-radius);
-            box-shadow: var(--shadow);
-            overflow: hidden;
-            margin-bottom: 40px;
-            position: relative;
-        }
+.app-wrapper {
+    width: 100%;
+    max-width: 480px;
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
 
-        /* --- الهيدر (Header) --- */
-        .header {
-            background: linear-gradient(135deg, var(--primary-color), #283593);
-            color: white;
-            padding: 30px 20px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
+header {
+    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+    padding: 40px 20px 30px;
+    text-align: center;
+    color: white;
+    position: relative;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    z-index: 10;
+}
 
-        .header::after {
-            content: '';
-            position: absolute;
-            bottom: -50px;
-            left: -10%;
-            width: 120%;
-            height: 100px;
-            background: var(--surface-color);
-            border-radius: 50%;
-        }
+.brand-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
 
-        .logo-icon {
-            font-size: 40px;
-            margin-bottom: 10px;
-            display: block;
-        }
+.brand-sticker {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+    animation: float 3s ease-in-out infinite;
+    margin-bottom: 15px;
+}
 
-        .header h1 {
-            margin: 0;
-            font-size: 22px;
-            font-weight: 900;
-            letter-spacing: 0.5px;
-        }
+.brand-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+}
 
-        .header p {
-            margin: 5px 0 0;
-            font-size: 14px;
-            opacity: 0.9;
-            font-weight: 400;
-        }
+.brand-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    background: linear-gradient(to right, #ffffff 0%, #d4af37 50%, #ffffff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
 
-        /* --- شريط التقدم (Progress Bar) --- */
-        .progress-container {
-            padding: 20px 30px;
-            position: relative;
-            z-index: 2;
-        }
+.brand-subtitle {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    color: var(--accent);
+    text-transform: uppercase;
+    opacity: 0.9;
+}
 
-        .progress-track {
-            background-color: #e0e0e0;
-            height: 6px;
-            border-radius: 10px;
-            position: relative;
-            overflow: hidden;
-        }
+.step-indicator {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 40px;
+    margin-top: -25px;
+    position: relative;
+    z-index: 20;
+}
 
-        .progress-fill {
-            background-color: var(--secondary-color);
-            height: 100%;
-            width: 33%;
-            border-radius: 10px;
-            transition: width 0.5s ease;
-        }
+.step-dot {
+    width: 50px;
+    height: 50px;
+    background: var(--bg-card);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: var(--text-light);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    border: 3px solid #fff;
+    transition: var(--transition);
+    font-size: 14px;
+}
 
-        .steps-label {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 8px;
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--text-secondary);
-        }
+.step-dot.active {
+    background: var(--primary);
+    color: #fff;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 50, 150, 0.3);
+}
 
-        .step-active { color: var(--primary-color); }
+.step-dot.completed {
+    background: var(--success);
+    color: #fff;
+}
 
-        /* --- محتوى النموذج (Form Content) --- */
-        .form-content {
-            padding: 10px 25px 30px;
-            min-height: 400px;
-        }
+.progress-line-bg {
+    position: absolute;
+    top: 50%;
+    left: 60px;
+    right: 60px;
+    height: 4px;
+    background: #e0e0e0;
+    z-index: -1;
+    transform: translateY(-50%);
+}
 
-        .step {
-            display: none;
-            animation: fadeIn 0.4s ease-in-out;
-        }
+.progress-line-fill {
+    position: absolute;
+    top: 50%;
+    left: 60px;
+    height: 4px;
+    background: var(--success);
+    z-index: -1;
+    transform: translateY(-50%);
+    transition: width 0.5s ease;
+    width: 0%;
+}
 
-        .step.active {
-            display: block;
-        }
+form {
+    padding: 40px 25px;
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
 
-        .section-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            border-right: 4px solid var(--secondary-color);
-            padding-right: 10px;
-            display: flex;
-            align-items: center;
-        }
+.step-content {
+    display: none;
+    animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-        /* --- حقول الإدخال (Inputs) --- */
-        .input-group {
-            position: relative;
-            margin-bottom: 25px;
-        }
+.step-content.active {
+    display: block;
+}
 
-        .input-group label {
-            position: absolute;
-            top: 50%;
-            right: 15px;
-            transform: translateY(-50%);
-            background-color: var(--surface-color);
-            padding: 0 5px;
-            font-size: 14px;
-            color: var(--text-secondary);
-            transition: var(--transition);
-            pointer-events: none;
-            z-index: 1;
-        }
+.input-wrapper {
+    position: relative;
+    margin-bottom: 25px;
+}
 
-        .input-group input, 
-        .input-group select {
-            width: 100%;
-            padding: 16px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 15px;
-            background: transparent;
-            font-family: 'Cairo', sans-serif;
-            color: var(--text-primary);
-            transition: var(--transition);
-            appearance: none; /* لإزالة سهم السيلكت الافتراضي */
-        }
+.input-wrapper label {
+    position: absolute;
+    top: 18px;
+    right: 15px;
+    font-size: 14px;
+    color: #999;
+    background: var(--bg-card);
+    padding: 0 5px;
+    transition: var(--transition);
+    pointer-events: none;
+}
 
-        .input-group input:focus,
-        .input-group select:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 4px rgba(26, 35, 126, 0.1);
-        }
+.input-field {
+    width: 100%;
+    padding: 18px 15px;
+    font-size: 16px;
+    border: 2px solid #eee;
+    border-radius: 12px;
+    background: transparent;
+    transition: var(--transition);
+    font-family: 'Cairo', sans-serif;
+    color: var(--text-main);
+    font-weight: 600;
+}
 
-        /* تحريك التسمية عند التركيز أو وجود نص */
-        .input-group input:focus ~ label,
-        .input-group input:not(:placeholder-shown) ~ label,
-        .input-group select:focus ~ label,
-        .input-group select:valid ~ label {
-            top: 0;
-            font-size: 12px;
-            color: var(--primary-color);
-            font-weight: 700;
-        }
+.input-field:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px rgba(0, 50, 150, 0.1);
+}
 
-        .input-group select {
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a237e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: left 15px center;
-            background-size: 16px;
-        }
+.input-field:focus ~ label,
+.input-field:not(:placeholder-shown) ~ label {
+    top: -10px;
+    font-size: 12px;
+    color: var(--primary);
+    font-weight: 700;
+}
 
-        .error-message {
-            color: var(--error-color);
-            font-size: 11px;
-            margin-top: 5px;
-            display: none;
-            font-weight: 600;
-        }
+.input-field.error {
+    border-color: var(--error);
+    background: #fff5f5;
+}
 
-        .input-group.error input,
-        .input-group.error select {
-            border-color: var(--error-color);
-            background-color: #fff8f8;
-        }
-        
-        .input-group.error .error-message { display: block; }
-        .input-group.error label { color: var(--error-color); }
+.input-field.error ~ label {
+    color: var(--error);
+}
 
-        /* --- الأزرار (Buttons) --- */
-        .actions {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-        }
+.error-msg {
+    color: var(--error);
+    font-size: 12px;
+    margin-top: 6px;
+    display: none;
+    font-weight: 600;
+    padding-right: 5px;
+}
 
-        .btn {
-            flex: 1;
-            padding: 16px;
-            border: none;
-            border-radius: 12px;
-            font-family: 'Cairo', sans-serif;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
+select.input-field {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a237e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: left 15px center;
+    background-size: 18px;
+}
 
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-            box-shadow: 0 4px 15px rgba(26, 35, 126, 0.3);
-        }
+.btn-group {
+    display: flex;
+    gap: 15px;
+    margin-top: 40px;
+}
 
-        .btn-primary:active { transform: scale(0.98); }
+.btn {
+    flex: 1;
+    padding: 16px;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Cairo', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+}
 
-        .btn-secondary {
-            background-color: #f0f2f5;
-            color: var(--text-secondary);
-        }
+.btn-primary {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 8px 20px rgba(0, 50, 150, 0.25);
+}
 
-        /* --- بطاقة الملخص (Summary Card) --- */
-        .summary-card {
-            background-color: #f8f9fa;
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid #eee;
-        }
+.btn-primary:active {
+    transform: scale(0.96);
+}
 
-        .summary-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            padding-bottom: 12px;
-            border-bottom: 1px dashed #e0e0e0;
-        }
-        
-        .summary-item:last-child { border-bottom: none; margin-bottom: 0; }
+.btn-secondary {
+    background: #f1f3f5;
+    color: var(--text-light);
+}
 
-        .s-label { color: var(--text-secondary); font-size: 13px; }
-        .s-value { font-weight: 700; color: var(--primary-color); font-size: 14px; text-align: left; }
+.summary-box {
+    background: #f8f9fa;
+    border-radius: 16px;
+    padding: 25px;
+    border: 1px dashed #ced4da;
+}
 
-        /* --- Checkbox Custom --- */
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 20px;
-            background: #fff;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #eee;
-        }
-        
-        input[type="checkbox"] {
-            accent-color: var(--primary-color);
-            width: 20px;
-            height: 20px;
-        }
-        
-        .checkbox-group label { font-size: 13px; color: var(--text-secondary); cursor: pointer; }
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
 
-        /* --- Animations --- */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+.summary-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
 
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
-        }
+.s-label {
+    color: #888;
+    font-size: 13px;
+    font-weight: 600;
+}
 
-        .shake { animation: shake 0.3s ease-in-out; }
+.s-value {
+    color: var(--text-main);
+    font-weight: 700;
+    font-size: 15px;
+    text-align: left;
+}
 
-    </style>
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 25px;
+    padding: 15px;
+    background: rgba(46, 204, 113, 0.1);
+    border-radius: 12px;
+    border: 1px solid rgba(46, 204, 113, 0.2);
+}
+
+.checkbox-wrapper input {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--success);
+    cursor: pointer;
+}
+
+.checkbox-wrapper label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-main);
+    cursor: pointer;
+    line-height: 1.4;
+}
+
+.toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    background: #333;
+    color: #fff;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    z-index: 1000;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.toast.visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.toast.success { background: var(--success); }
+.toast.error { background: var(--error); }
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+    100% { transform: translateY(0px); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); border-color: var(--error); }
+    75% { transform: translateX(5px); border-color: var(--error); }
+}
+
+.shake { animation: shake 0.4s ease-in-out; }
+
+</style>
 </head>
 <body>
 
-<div class="app-container">
-    <div class="header">
-        <span class="logo-icon">⚖️</span>
-        <h1>بوابة البحوث الأكاديمية</h1>
-        <p>نظام طلبات البحوث القانونية - دفعة 2026</p>
-    </div>
+<div class="toast" id="toast">
+    <span id="toastIcon"></span>
+    <span id="toastMsg"></span>
+</div>
 
-    <div class="progress-container">
-        <div class="progress-track">
-            <div class="progress-fill" id="progressBar"></div>
+<div class="app-wrapper">
+    <header>
+        <div class="brand-container">
+            <img src="sticker.webp" alt="Logo" class="brand-sticker">
+            <div class="brand-logo">
+                <span class="brand-name">SWIMA</span>
+                <span class="brand-subtitle">للبحوث الأكاديمية</span>
+            </div>
         </div>
-        <div class="steps-label">
-            <span id="label1" class="step-active">البيانات الشخصية</span>
-            <span id="label2">تفاصيل البحث</span>
-            <span id="label3">المراجعة</span>
-        </div>
-    </div>
-
-    <div class="form-content">
         
-        <div class="step active" id="step1">
-            <div class="section-title">بيانات الطالب</div>
+        <div class="step-indicator">
+            <div class="progress-line-bg"></div>
+            <div class="progress-line-fill" id="progressFill"></div>
+            <div class="step-dot active" id="dot1">1</div>
+            <div class="step-dot" id="dot2">2</div>
+            <div class="step-dot" id="dot3">3</div>
+        </div>
+    </header>
+
+    <form onsubmit="return false;">
+        
+        <div class="step-content active" id="step1">
+            <h3 style="margin-bottom: 25px; color: var(--primary); font-weight: 800;">المعلومات الشخصية</h3>
             
-            <div class="input-group">
-                <input type="text" id="name" placeholder=" " autocomplete="off">
-                <label>الاسم واللقب (ثلاثي)</label>
-                <div class="error-message">يرجى كتابة الاسم الثلاثي بالكامل (حروف فقط)</div>
+            <div class="input-wrapper">
+                <input type="text" id="name" class="input-field" placeholder=" " autocomplete="off">
+                <label>الاسم الكامل</label>
+                <div class="error-msg" id="err-name">يرجى كتابة اسم حقيقي (حروف فقط)</div>
             </div>
 
-            <div class="input-group">
-                <input type="tel" id="phone" placeholder=" " maxlength="10" inputmode="numeric">
-                <label>رقم الهاتف (للتواصل)</label>
-                <div class="error-message">رقم الهاتف يجب أن يبدأ بـ 05/06/07 ويتكون من 10 أرقام</div>
+            <div class="input-wrapper">
+                <input type="tel" id="phone" class="input-field" placeholder=" " maxlength="10" inputmode="numeric">
+                <label>رقم الهاتف</label>
+                <div class="error-msg" id="err-phone">رقم هاتف غير صحيح (يبدأ بـ 05, 06, 07)</div>
             </div>
 
-            <div class="input-group">
-                <input type="text" id="wilaya" placeholder=" ">
+            <div class="input-wrapper">
+                <input type="text" id="wilaya" class="input-field" placeholder=" ">
                 <label>الولاية</label>
-                <div class="error-message">يرجى كتابة اسم الولاية بشكل صحيح</div>
+                <div class="error-msg" id="err-wilaya">يرجى كتابة الولاية</div>
             </div>
 
-            <div class="actions">
+            <div class="btn-group">
                 <button class="btn btn-primary" onclick="nextStep(1)">
-                    التالي
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                    المتابعة
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                 </button>
             </div>
         </div>
 
-        <div class="step" id="step2">
-            <div class="section-title">تفاصيل البحث العلمي</div>
-            
-            <div class="input-group">
-                <select id="level" required>
+        <div class="step-content" id="step2">
+            <h3 style="margin-bottom: 25px; color: var(--primary); font-weight: 800;">تفاصيل الطلب</h3>
+
+            <div class="input-wrapper">
+                <select id="level" class="input-field">
                     <option value="" disabled selected></option>
                     <option value="سنة أولى حقوق">سنة أولى حقوق</option>
                     <option value="سنة ثانية حقوق">سنة ثانية حقوق</option>
@@ -385,200 +476,213 @@
                     <option value="سنة ثالثة (قانون عام)">سنة ثالثة (قانون عام)</option>
                 </select>
                 <label>المستوى الدراسي</label>
-                <div class="error-message">يرجى اختيار المستوى</div>
+                <div class="error-msg" id="err-level">يجب اختيار المستوى</div>
             </div>
 
-            <div class="input-group">
-                <input type="text" id="module" placeholder=" ">
+            <div class="input-wrapper">
+                <input type="text" id="module" class="input-field" placeholder=" ">
                 <label>اسم المقياس (المادة)</label>
-                <div class="error-message">يرجى تحديد المقياس (3 أحرف على الأقل)</div>
+                <div class="error-msg" id="err-module">اسم المقياس مطلوب</div>
             </div>
 
-            <div class="input-group">
-                <input type="text" id="title" placeholder=" ">
+            <div class="input-wrapper">
+                <input type="text" id="title" class="input-field" placeholder=" ">
                 <label>عنوان البحث</label>
-                <div class="error-message">عنوان البحث قصير جداً</div>
+                <div class="error-msg" id="err-title">عنوان البحث مطلوب (أكثر من 5 أحرف)</div>
             </div>
 
-            <div class="input-group">
-                <input type="date" id="date" placeholder=" ">
-                <label>تاريخ التسليم المطلوب</label>
-                <div class="error-message">يرجى اختيار تاريخ صالح</div>
+            <div class="input-wrapper">
+                <input type="date" id="date" class="input-field" placeholder=" ">
+                <label>تاريخ التسليم</label>
+                <div class="error-msg" id="err-date">تاريخ غير صالح</div>
             </div>
 
-            <div class="input-group">
-                <select id="feature">
-                    <option value="لا، بحث فقط" selected>بحث فقط (نسخة PDF)</option>
-                    <option value="نعم، أريد شرح جزئيات">شرح إضافي + خطة البحث (Premium)</option>
+            <div class="input-wrapper">
+                <select id="feature" class="input-field">
+                    <option value="لا، بحث فقط" selected>بحث فقط (قياسي)</option>
+                    <option value="نعم، أريد شرح جزئيات">شرح إضافي + خطة (Premium)</option>
                 </select>
                 <label>خدمات إضافية</label>
             </div>
 
-            <div class="actions">
+            <div class="btn-group">
                 <button class="btn btn-secondary" onclick="prevStep(2)">رجوع</button>
                 <button class="btn btn-primary" onclick="nextStep(2)">
-                    التالي
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                    متابعة
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                 </button>
             </div>
         </div>
 
-        <div class="step" id="step3">
-            <div class="section-title">مراجعة وتأكيد الطلب</div>
+        <div class="step-content" id="step3">
+            <h3 style="margin-bottom: 25px; color: var(--primary); font-weight: 800;">تأكيد البيانات</h3>
             
-            <div class="summary-card">
-                <div class="summary-item">
+            <div class="summary-box">
+                <div class="summary-row">
                     <span class="s-label">الطالب</span>
-                    <span class="s-value" id="s-name">--</span>
+                    <span class="s-value" id="res-name"></span>
                 </div>
-                <div class="summary-item">
+                <div class="summary-row">
+                    <span class="s-label">الهاتف</span>
+                    <span class="s-value" id="res-phone" style="direction: ltr;"></span>
+                </div>
+                <div class="summary-row">
                     <span class="s-label">التخصص</span>
-                    <span class="s-value" id="s-level">--</span>
+                    <span class="s-value" id="res-level"></span>
                 </div>
-                <div class="summary-item">
+                <div class="summary-row">
                     <span class="s-label">المادة</span>
-                    <span class="s-value" id="s-module">--</span>
+                    <span class="s-value" id="res-module"></span>
                 </div>
-                <div class="summary-item">
+                <div class="summary-row">
                     <span class="s-label">العنوان</span>
-                    <span class="s-value" id="s-title">--</span>
+                    <span class="s-value" id="res-title"></span>
                 </div>
-                <div class="summary-item">
+                <div class="summary-row">
                     <span class="s-label">التاريخ</span>
-                    <span class="s-value" id="s-date">--</span>
+                    <span class="s-value" id="res-date"></span>
                 </div>
             </div>
 
-            <div class="checkbox-group">
+            <div class="checkbox-wrapper">
                 <input type="checkbox" id="terms">
-                <label for="terms">أتعهد بصحة المعلومات وألتزم بدفع الرسوم الرمزية بعد القبول.</label>
+                <label for="terms">أؤكد صحة البيانات وأوافق على دفع الرسوم الرمزية بعد قبول الطلب.</label>
             </div>
 
-            <div class="actions">
+            <div class="btn-group">
                 <button class="btn btn-secondary" onclick="prevStep(3)">تعديل</button>
-                <button class="btn btn-primary" onclick="submitForm()">
+                <button class="btn btn-primary" onclick="submitData()">
                     ✅ تأكيد وإرسال
                 </button>
             </div>
         </div>
 
-    </div>
+    </form>
 </div>
 
 <script>
-    // --- تهيئة التليجرام ---
     const tg = window.Telegram.WebApp;
     tg.expand();
-    tg.MainButton.hide();
+    tg.ready();
 
-    // --- إعدادات التواريخ ---
     const dateInput = document.getElementById('date');
     const today = new Date().toISOString().split('T')[0];
-    dateInput.min = today; // منع التواريخ الماضية
+    dateInput.min = today;
 
-    // --- منطق التنقل بين الخطوات ---
-    let currentStep = 1;
-
-    function updateProgress(step) {
-        const bar = document.getElementById('progressBar');
-        const labels = [document.getElementById('label1'), document.getElementById('label2'), document.getElementById('label3')];
+    function showToast(msg, type = 'error') {
+        const toast = document.getElementById('toast');
+        const icon = document.getElementById('toastIcon');
+        const text = document.getElementById('toastMsg');
         
-        // تحديث الشريط الملون
-        const percentage = ((step - 1) / 2) * 100;
-        bar.style.width = percentage === 0 ? '33%' : (step === 2 ? '66%' : '100%');
+        toast.className = `toast visible ${type}`;
+        icon.innerHTML = type === 'error' ? '⚠️' : '🎉';
+        text.textContent = msg;
+        
+        if (type === 'error') tg.HapticFeedback.notificationOccurred('error');
+        else tg.HapticFeedback.notificationOccurred('success');
 
-        // تحديث ألوان النصوص
-        labels.forEach((lbl, idx) => {
-            if(idx + 1 <= step) lbl.classList.add('step-active');
-            else lbl.classList.remove('step-active');
-        });
+        setTimeout(() => toast.classList.remove('visible'), 3000);
     }
 
-    function showStep(step) {
-        document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
-        document.getElementById(`step${step}`).classList.add('active');
-        updateProgress(step);
-        currentStep = step;
+    function validateField(id, condition) {
+        const el = document.getElementById(id);
+        const err = document.getElementById(`err-${id}`);
+        const parent = el.closest('.input-wrapper');
         
-        // إذا وصلنا للخطوة 3، نملأ الملخص
-        if(step === 3) fillSummary();
+        if (!condition) {
+            parent.classList.add('shake');
+            el.classList.add('error');
+            err.style.display = 'block';
+            setTimeout(() => parent.classList.remove('shake'), 400);
+            return false;
+        } else {
+            el.classList.remove('error');
+            err.style.display = 'none';
+            return true;
+        }
     }
 
-    // --- التحقق من صحة البيانات (Validation) ---
-    function validateStep(step) {
-        let valid = true;
-        
-        const setError = (id, hasError) => {
-            const group = document.getElementById(id).closest('.input-group');
-            if(hasError) {
-                group.classList.add('error', 'shake');
-                setTimeout(() => group.classList.remove('shake'), 500);
-                valid = false;
-            } else {
-                group.classList.remove('error');
-            }
-        };
+    function nextStep(currentStep) {
+        let isValid = true;
 
-        if (step === 1) {
+        if (currentStep === 1) {
             const name = document.getElementById('name').value.trim();
             const phone = document.getElementById('phone').value.trim();
             const wilaya = document.getElementById('wilaya').value.trim();
 
-            // تحقق الاسم: حروف فقط، أكثر من 5 أحرف
-            const nameRegex = /^[\u0600-\u06FFa-zA-Z\s]{5,}$/;
-            setError('name', !nameRegex.test(name));
-
-            // تحقق الهاتف: جزائري
+            const nameRegex = /^[\u0600-\u06FFa-zA-Z\s]{3,}$/;
             const phoneRegex = /^(05|06|07)[0-9]{8}$/;
-            setError('phone', !phoneRegex.test(phone));
 
-            // تحقق الولاية
-            setError('wilaya', wilaya.length < 3);
-        }
-
-        if (step === 2) {
+            isValid = validateField('name', nameRegex.test(name)) && isValid;
+            isValid = validateField('phone', phoneRegex.test(phone)) && isValid;
+            isValid = validateField('wilaya', wilaya.length > 2) && isValid;
+        } 
+        else if (currentStep === 2) {
             const level = document.getElementById('level').value;
             const module = document.getElementById('module').value.trim();
             const title = document.getElementById('title').value.trim();
             const date = document.getElementById('date').value;
 
-            setError('level', level === "");
-            setError('module', module.length < 3);
-            setError('title', title.length < 5);
-            setError('date', date === "");
+            isValid = validateField('level', level !== "") && isValid;
+            isValid = validateField('module', module.length >= 2) && isValid;
+            isValid = validateField('title', title.length >= 5) && isValid;
+            isValid = validateField('date', date !== "") && isValid;
         }
 
-        if (!valid) tg.HapticFeedback.notificationOccurred('error');
-        return valid;
-    }
-
-    function nextStep(current) {
-        if (validateStep(current)) {
-            tg.HapticFeedback.selectionChanged();
-            showStep(current + 1);
+        if (isValid) {
+            if (currentStep === 2) updateSummary();
+            goToStep(currentStep + 1);
+        } else {
+            showToast('يرجى تصحيح الأخطاء', 'error');
         }
     }
 
-    function prevStep(current) {
-        tg.HapticFeedback.selectionChanged();
-        showStep(current - 1);
+    function prevStep(currentStep) {
+        goToStep(currentStep - 1);
     }
 
-    function fillSummary() {
-        document.getElementById('s-name').textContent = document.getElementById('name').value;
-        document.getElementById('s-level').textContent = document.getElementById('level').value;
-        document.getElementById('s-module').textContent = document.getElementById('module').value;
-        document.getElementById('s-title').textContent = document.getElementById('title').value;
-        document.getElementById('s-date').textContent = document.getElementById('date').value;
-    }
+    function goToStep(step) {
+        document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+        document.getElementById(`step${step}`).classList.add('active');
 
-    // --- الإرسال النهائي ---
-    function submitForm() {
-        const terms = document.getElementById('terms').checked;
+        document.querySelectorAll('.step-dot').forEach((dot, index) => {
+            if (index + 1 < step) {
+                dot.classList.add('completed');
+                dot.classList.remove('active');
+                dot.innerHTML = '✓';
+            } else if (index + 1 === step) {
+                dot.classList.add('active');
+                dot.classList.remove('completed');
+                dot.innerHTML = step;
+            } else {
+                dot.classList.remove('active', 'completed');
+                dot.innerHTML = index + 1;
+            }
+        });
+
+        const progress = document.getElementById('progressFill');
+        if (step === 1) progress.style.width = '0%';
+        else if (step === 2) progress.style.width = '50%';
+        else if (step === 3) progress.style.width = '100%';
         
-        if (!terms) {
-            tg.showPopup({title: 'تنبيه', message: 'يجب الموافقة على التعهد قبل الإرسال'});
-            tg.HapticFeedback.notificationOccurred('warning');
+        tg.HapticFeedback.selectionChanged();
+    }
+
+    function updateSummary() {
+        document.getElementById('res-name').textContent = document.getElementById('name').value;
+        document.getElementById('res-phone').textContent = document.getElementById('phone').value;
+        document.getElementById('res-level').textContent = document.getElementById('level').value;
+        document.getElementById('res-module').textContent = document.getElementById('module').value;
+        document.getElementById('res-title').textContent = document.getElementById('title').value;
+        document.getElementById('res-date').textContent = document.getElementById('date').value;
+    }
+
+    function submitData() {
+        if (!document.getElementById('terms').checked) {
+            showToast('يجب الموافقة على الشروط', 'error');
+            const wrap = document.querySelector('.checkbox-wrapper');
+            wrap.classList.add('shake');
+            setTimeout(() => wrap.classList.remove('shake'), 400);
             return;
         }
 
@@ -593,11 +697,12 @@
             feature: document.getElementById('feature').value
         };
 
-        tg.HapticFeedback.notificationOccurred('success');
-        tg.sendData(JSON.stringify(data));
+        showToast('جاري إرسال الطلب...', 'success');
+        
+        setTimeout(() => {
+            tg.sendData(JSON.stringify(data));
+        }, 800);
     }
-
 </script>
-
 </body>
 </html>
